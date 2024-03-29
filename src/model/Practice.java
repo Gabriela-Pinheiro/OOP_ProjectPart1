@@ -1,4 +1,4 @@
-//Gabriela Pinheiro - R00225375 - Final Project
+//Gabriela Pinheiro - R00225375- Project_Part1
 
 package model;
 
@@ -13,8 +13,34 @@ public class Practice implements Serializable{
 		this.consultants = new ArrayList<Consultant>();
 	}
 
-	public void addConsultant(Consultant c) {
-		this.consultants.add(c);
+	public Consultant addConsultant(Consultant c) {
+		try {
+			this.consultants.add(c);		
+		} catch (Exception e) {
+			return null;
+		} 
+		return c;
+	}
+	
+	public boolean removeConsultant(String name) {
+		Consultant remove = this.searchConsltant(name);
+		
+		if(remove != null) {
+			this.consultants.remove(remove);
+			return true;
+		}
+		return false;
+	}
+	
+	public Consultant searchConsltant(String name) {
+		Consultant obj = null;
+		//TODO cannot be case sensitive - all to upper or lower case
+		for(Consultant c: this.consultants) {
+			if(c.getName().toString().equals(name)) {
+				obj = c;
+			}
+		}
+		return obj;
 	}
 	
 	public ArrayList<Consultant> getConsultants() {
@@ -27,6 +53,14 @@ public class Practice implements Serializable{
 			toReturn += "\n" + consultant.getId() + ": " + consultant.getName() + " - " + consultant.getExpertise();
 		}
 		return toReturn;
+	}
+	
+	public ArrayList<String> getConsultantData() {
+		ArrayList<String> consultantData= new ArrayList<String>();
+		for(Consultant c: this.consultants) {
+			consultantData.add(c.toString());
+		}
+		return consultantData;
 	}
 	
 	public String showConsultantsDetails() {

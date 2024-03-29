@@ -2,6 +2,9 @@
 
 package model;
 
+import java.lang.ModuleLayer.Controller;
+import java.util.function.Function;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -11,13 +14,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.util.Callback;
+import javafx.util.Pair;
 
-public class AddDialog extends Dialog<Object>{
+public class AddDialog extends Dialog<Patient>{
 	
 	private Patient patient;
 	private Consultant consultant;
 
-	private TextField firstNameInput, lastNameInput, phoneInput ;
+	private TextField firstNameInput, lastNameInput, phoneInput, expertiseInput;
 
 	
 	//Overloading
@@ -26,7 +31,7 @@ public class AddDialog extends Dialog<Object>{
 		this.setTitle("Add Patient");
 		this.patient = p;
 		buildUI();
-		setPropertyBinding();
+		setPropertyBindingPatient();
 		setResultConverter();
 	}
 	
@@ -36,90 +41,175 @@ public class AddDialog extends Dialog<Object>{
 		this.setTitle("Add Consultant");
 		this.consultant = c;
 		buildUI();
-		setPropertyBinding();
+		setPropertyBindingConsultant();
 		setResultConverter();
 	}
 	
 	private void buildUI() {
-		GridPane gridPane = inputFieldsGrid();
-		getDialogPane().setContent(gridPane);
+		
+			GridPane gridPane = inputFieldsGrid();
+			getDialogPane().setContent(gridPane);
 
-		getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-		Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
-		button.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+			getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+			Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
+			button.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
 
-			@Override
-			public void handle(ActionEvent event) {
-				if(!validateDialog()) {
-					event.consume();
+				@Override
+				public void handle(ActionEvent event) {
+					if(!validateDialog()) {
+						event.consume();
+					}
+					
+				System.out.println("Dialog line 60");
 				}
 				
-			}
-
-			//TODO change palce maybe
-			private boolean validateDialog() {
-				if((firstNameInput.getText().isEmpty()) || (phoneInput.getText().isEmpty())) {
+				private boolean validateDialog() {
+					if((firstNameInput.getText().isEmpty()) || (phoneInput.getText().isEmpty())) {
+						System.out.println("Dialog line 65");
+						return false;					
+					}
+					System.out.println("Dialog line 68");
 					return true;
-					
 				}
-				return false;
-			}
-		});
+			});
+		
+		
 	}
 
-	
+	private void setPropertyBindingPatient() {
+		//fName-lNmae from person. phone from patient. expertise from consultant
 
-	private void setPropertyBinding() {
-		firstNameInput.textProperty().bindBidirectional(patient.getName().getFirstName());
-		lastNameInput.textProperty().bindBidirectional(patient.getName().getLastName());
-		phoneInput.textProperty().bindBidirectional(patient.getPhone());
-		
+//		firstNameInput.textProperty().bindBidirectional(Controller.getInstance().getName().getFirstName());
+		firstNameInput.textProperty().bindBidirectional(patient.getName().getFirstNameProperty());
+		lastNameInput.textProperty().bindBidirectional(patient.getName().getLastNameProperty());
+		phoneInput.textProperty().bindBidirectional(patient.getPhoneProperty());
+
+	}
+	
+	private void setPropertyBindingConsultant() {
+		//fName-lNmae from person. phone from patient. expertise from consultant
+
+//		firstNameInput.textProperty().bindBidirectional(Controller.getInstance().getName().getFirstName());
+		firstNameInput.textProperty().bindBidirectional(consultant.getName().getFirstNameProperty());
+		lastNameInput.textProperty().bindBidirectional(consultant.getName().getLastNameProperty());
+		phoneInput.textProperty().bindBidirectional(consultant.getPhoneProperty());
+
 	}
 	
 	private void setResultConverter() {
-		// TODO Auto-generated method stub
-		
+//		if(s.equals("patient")){			
+			
+			Callback<ButtonType, Patient> patientResultConverter = new Callback<ButtonType, Patient>(){
+
+				@Override
+				public Patient call(ButtonType param) {
+					if(param == ButtonType.OK) {
+//					System.out.println("Dialog line 93");
+						return patient;					
+					} else {
+						return null;					
+					}
+				}
+			};
+			setResultConverter(patientResultConverter);
+//		} else {
+//			
+//			Callback<ButtonType, Consultant> consultantResultConverter = new Callback<ButtonType, Consultant>(){
+//	
+//				@Override
+//				public Consultant call(ButtonType param) {
+//					if(param == ButtonType.OK) {
+//	//					System.out.println("Dialog line 93");
+//						return consultant;					
+//					} else {
+//						return null;					
+//					}
+//				}
+//			};
+//			setResultConverter(consultantResultConverter);
+//		}
 	}
-
-
 
 	
 	private GridPane inputFieldsGrid() {
 		
-		GridPane grid = new GridPane();
-		grid.setVgap(8);
-		grid.setHgap(10);
-		
-		// adding labels
-		Label nameLabel = new Label("Enter Name");
-		Label phoneLabel = new Label("Enter Phone");
-//		Label dobLabel = new Label("Enter Date of Birth ");
-		
-		//adding text fields
-		firstNameInput = new TextField();
-		firstNameInput.setPromptText("Name");
-		lastNameInput = new TextField();
-		lastNameInput.setPromptText("Surname");
-		phoneInput = new TextField();
-		phoneInput.setPromptText("000-000-000");
-//		TextField dobInput = new TextField();
-//		dobInput.setPromptText("DD/MM/YYYY");
-		
-		// creating hBox and addAll
-		HBox nameBox = new HBox(5);
-		HBox phoneBox = new HBox(5);
-//		HBox dobBox = new HBox(5);
-		
-		nameBox.getChildren().addAll(nameLabel, firstNameInput, lastNameInput);
-		phoneBox.getChildren().addAll(phoneLabel, phoneInput);
-//		dobBox.getChildren().addAll(dobLabel, dobInput);
-		
-		grid.add(nameBox, 0, 0, 1, 1);
-		grid.add(phoneBox, 0, 1, 1, 1);
-//		grid.add(dobBox, 0, 2, 1, 1);
+//		if(o instanceof Patient) {
+			
+			GridPane grid = new GridPane();
+			grid.setVgap(8);
+			grid.setHgap(10);
+			
+			// adding labels
+			Label nameLabel = new Label("Enter Name");
+			Label phoneLabel = new Label("Enter Phone");
+	//		Label dobLabel = new Label("Enter Date of Birth ");
+			
+			//adding text fields
+			firstNameInput = new TextField();
+			firstNameInput.setPromptText("Name");
+			lastNameInput = new TextField();
+			lastNameInput.setPromptText("Surname");
+			phoneInput = new TextField();
+			phoneInput.setPromptText("000-000-000");
+	//		TextField dobInput = new TextField();
+	//		dobInput.setPromptText("DD/MM/YYYY");
+			
+			// creating hBox and addAll
+			HBox nameBox = new HBox(5);
+			HBox phoneBox = new HBox(5);
+	//		HBox dobBox = new HBox(5);
+			
+			nameBox.getChildren().addAll(nameLabel, firstNameInput, lastNameInput);
+			phoneBox.getChildren().addAll(phoneLabel, phoneInput);
+	//		dobBox.getChildren().addAll(dobLabel, dobInput);
+			
+			grid.add(nameBox, 0, 0, 1, 1);
+			grid.add(phoneBox, 0, 1, 1, 1);
+	//		grid.add(dobBox, 0, 2, 1, 1);
+	
+			return grid;
 
-		return grid;
+//		} else if (o instanceof Consultant) {
+//			
+//			GridPane grid = new GridPane();
+//			grid.setVgap(8);
+//			grid.setHgap(10);
+//			
+//			// adding labels
+//			Label nameLabel = new Label("Enter Name");
+//			Label expertiseLabel = new Label("Enter Expertise");
+//
+//			
+//			//adding text fields
+//			firstNameInput = new TextField();
+//			firstNameInput.setPromptText("Name");
+//			lastNameInput = new TextField();
+//			lastNameInput.setPromptText("Surname");
+//			expertiseInput = new TextField();
+//			expertiseInput.setPromptText("General");
+//
+//			
+//			// creating hBox and addAll
+//			HBox nameBox = new HBox(5);
+//			HBox expertiseBox = new HBox(5);
+//
+//			
+//			nameBox.getChildren().addAll(nameLabel, firstNameInput, lastNameInput);
+//			expertiseBox.getChildren().addAll(expertiseLabel, expertiseInput);
+//
+//			
+//			grid.add(nameBox, 0, 0, 1, 1);
+//			grid.add(expertiseBox, 0, 1, 1, 1);
+//		
+//			return grid;
+//			
+//		} else {
+//			return null;
+//		}
+//		
 		
+		
+			
 	}
 	
 	

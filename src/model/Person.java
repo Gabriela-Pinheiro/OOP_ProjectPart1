@@ -1,4 +1,4 @@
-//Gabriela Pinheiro - R00225375 - Final Project
+//Gabriela Pinheiro - R00225375 - Project_Part1
 
 package model;
 
@@ -21,8 +21,12 @@ public abstract class Person implements Serializable{
 		return name;
 	}
 	
-	public StringProperty getPhone() {
+	public StringProperty getPhoneProperty() {
 		return phone;
+	}
+	
+	public String getPhone() {
+		return phone.get();
 	}
 	
 	protected void setId(String prefix, int id) {
@@ -35,7 +39,7 @@ public abstract class Person implements Serializable{
 
 	@Override
 	public String toString() {
-		return "\nName: " + this.getName() + "\nId: " + this.getId() + "\nPhone: " + this.getPhone() + "\n";
+		return "\nName: " + this.getName() + "\nId: " + this.getId() + "\nPhone: " + this.getPhoneProperty() + "\n";
 	}
 
 

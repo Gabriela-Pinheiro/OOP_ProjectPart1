@@ -19,27 +19,48 @@ public class PatientList implements Serializable{
 		return this.patients;
 	}
 	
-	public ArrayList<String> getPatientData(){
-		ArrayList<String> patientData = new ArrayList<String>();
+	public ArrayList<String> getPatientsData(){
+		ArrayList<String> patientsData = new ArrayList<String>();
 		for(Patient p: this.patients) {
-			patientData.add(p.toString());
+			patientsData.add(p.toString());
 		}
-		return patientData;
+		return patientsData;
 	}
 
 	public void setPatients(ArrayList<Patient> patients) {
 		this.patients = patients;
 	}
 
-	public boolean addPatients(Patient patient) {
+	public Patient addPatient(Patient patient) {
 		try {
 			this.patients.add(patient);			
 		} catch (Exception e) {
-			return false;
+			return null;
 		} 
-		return true;
+		return patient;
+	}
+	
+	public Patient searchPatient(String name) {
+		Patient obj = null;
+		//TODO cannot be case sensitive - all to upper or lower case
+		for(Patient p: this.patients) {
+			if(p.getName().toString().equals(name)) {
+				obj = p;
+			}
+		}
+		return obj;
 	}
 
+	public boolean removePatient(String name) {
+		Patient remove = this.searchPatient(name);
+		
+		if(remove != null) {
+			this.patients.remove(remove);
+			return true;
+		}
+		return false;
+	}
+	
 	@Override
 	public String toString() {
 		return "Patients: " + patients;

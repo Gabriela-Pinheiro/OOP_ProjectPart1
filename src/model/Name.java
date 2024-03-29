@@ -1,4 +1,4 @@
-//Gabriela Pinheiro - R00225375 - Final Project
+//Gabriela Pinheiro - R00225375 - Project_Part1
 package model;
 
 import java.io.Serializable;
@@ -18,7 +18,7 @@ public class Name implements Serializable{
 		this.lastName = new SimpleStringProperty(lastName);
 	}
 
-	@Override // ??????
+	@Override 
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -32,14 +32,22 @@ public class Name implements Serializable{
 
 	@Override
 	public String toString() {
-		return firstName + " " + lastName;
+		return firstName.get() + " " + lastName.get();
 	}
 	
-	public StringProperty getFirstName() {
+	public StringProperty getFirstNameProperty() {
 		return firstName;
 	}
 	
-	public StringProperty getLastName() {
+	public StringProperty getLastNameProperty() {
 		return lastName;
+	}
+	
+	public String getFirstName() {
+		return firstName.get();
+	}
+	
+	public String getLastName() {
+		return lastName.get();
 	}
 }

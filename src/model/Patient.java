@@ -67,7 +67,7 @@ public class Patient extends Person{
 
 	@Override
 	public String toString() {
-		return this.getId() + " " + this.getName();
+		return this.getId() + " " + this.getName().getFirstName() + " " + this.getName().getLastName();
 	}
 
 	@Override

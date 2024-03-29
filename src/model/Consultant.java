@@ -35,7 +35,7 @@ public class Consultant extends Person{
 	}
 
 	public void addPatient(Patient patient) {
-		this.patients.addPatients(patient);
+		this.patients.addPatient(patient);
 	}
 	
 	public void addPatientVisit(Patient p, Visit v) {

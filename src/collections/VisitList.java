@@ -1,4 +1,4 @@
-//Gabriela Pinheiro - R00225375 - Final Project
+//Gabriela Pinheiro - R00225375 - Project_Part1
 
 package collections;
 
@@ -10,7 +10,7 @@ import model.Visit;
 
 public class VisitList implements Serializable{
 	
-	private ArrayList<Visit> visits; // for each patient
+	private ArrayList<Visit> visits;
 	
 	public VisitList() {
 		this.visits = new ArrayList<Visit>();
