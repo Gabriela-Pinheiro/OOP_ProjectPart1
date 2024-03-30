@@ -50,12 +50,22 @@ public class PatientList implements Serializable{
 		}
 		return obj;
 	}
-
+	
 	public boolean removePatient(String name) {
-		Patient remove = this.searchPatient(name);
+		Patient toRemove = this.searchPatient(name);
 		
-		if(remove != null) {
-			this.patients.remove(remove);
+		if(toRemove != null) {
+			this.patients.remove(toRemove);
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean editPatient(String name) {
+		Patient toEdit = this.searchPatient(name);
+		
+		if(toEdit != null) {
+			//TODO edit patient
 			return true;
 		}
 		return false;

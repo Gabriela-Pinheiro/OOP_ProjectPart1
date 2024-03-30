@@ -16,7 +16,6 @@ public class Patient extends Person{
 	private VisitList patientVisits;
 	private String ilness;
 	public Severity severity;
-//	public PatientList allPatients= new PatientList();
 
 	public Patient(Name name, String phone) {
 		super(name, phone);
@@ -45,8 +44,8 @@ public class Patient extends Person{
 		return "Patient: " + this.getId() + ". " + patientVisits;
 	}
 
-	public void addVisit(Visit visit) {
-		this.patientVisits.addVisits(visit);			
+	public Visit addVisit(Visit visit) {
+		return this.patientVisits.addVisits(visit);			
 	}
 		
 	public Severity getSeverity() {
@@ -68,6 +67,7 @@ public class Patient extends Person{
 	@Override
 	public String toString() {
 		return this.getId() + " " + this.getName().getFirstName() + " " + this.getName().getLastName();
+		//+ " " + this.getPatientVisits().toString()
 	}
 
 	@Override

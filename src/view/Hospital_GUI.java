@@ -6,14 +6,16 @@
 
 package view;
 
+import java.time.LocalDate;
 import java.util.Optional;
-
 import controller.Controller;
 import model.AddDialog;
+import model.AddVisitDialog;
 import model.AlertBox;
 import model.Consultant;
 import model.Name;
 import model.Patient;
+import model.Visit;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
@@ -24,6 +26,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
@@ -45,14 +50,34 @@ public class Hospital_GUI extends VBox{
 	private int selectedIndex = -1;
 	protected ListProperty<String> listProperty = new SimpleListProperty<>();
 	private AlertBox alertBox = new AlertBox();
+	private MenuBar menuBar;
 	
 	public Hospital_GUI() {
 		super();
-		setUpUI();		
+		setUpUI();
 	}
 
 	private void setUpUI() {
-		this.getChildren().addAll(this.setUpTabPane());
+		this.getChildren().addAll(this.setUpTabPane(), this.menuBar());
+		
+	}
+	
+	private MenuBar menuBar() {
+		menuBar = new MenuBar();
+		Menu file = new Menu("File");
+		Menu help = new Menu("Help");
+		menuBar.setUseSystemMenuBar(true);
+		
+		menuBar.getMenus().addAll(file, help);
+		
+		MenuItem loadFromFileItem = new MenuItem("Load from file");
+		MenuItem saveToFileItem = new MenuItem("Save to file");
+		MenuItem aboutItem = new MenuItem("About");
+		
+		file.getItems().addAll(loadFromFileItem, saveToFileItem);		
+		help.getItems().addAll(aboutItem);		
+		
+		return menuBar;
 		
 	}
 	
@@ -66,10 +91,8 @@ public class Hospital_GUI extends VBox{
 		tabPane.getTabs().add(consultantTab);
 		consultantTab.setClosable(false);
 		
-//		patientTab.setContent(this.addListView("patient"));
 		patientTab.setContent(this.patientTab());
 		consultantTab.setContent(this.consultantTab());
-//		consultantTab.setContent(this.consultantTab());
 		
 		return tabPane;
 	}
@@ -112,7 +135,7 @@ public class Hospital_GUI extends VBox{
 		removeButton.setOnAction(e -> removePatient());
 		
 		addVisitButton = new Button("Add Visit");
-		addVisitButton.setOnAction(e -> System.out.println("Add patient visit"));
+		addVisitButton.setOnAction(e -> addPatientVisit());
 		
 		VBox patientButtonsBox = new VBox(10);
 		patientButtonsBox.setPadding(new Insets(20));
@@ -193,7 +216,7 @@ public class Hospital_GUI extends VBox{
 				
 				if(result.isPresent()) {
 					Patient patient = result.get();
-					patientListView.getItems().add(patient.getName().getFirstName() + " " + patient.getName().getLastName());					
+					patientListView.getItems().add(patient.getName().getFirstName() + " " + patient.getName().getLastName() + " " + patient.getPatientVisits().toString());					
 					setupListViewData();
 				}
 			}
@@ -222,9 +245,7 @@ public class Hospital_GUI extends VBox{
 //		};
 //		addPButton.setOnAction(eventHandler);
 //	}
-//	
-//	
-//	
+
 	private void removePatient() {
 		if(this.selectedIndex < 0) {
 			alertBox.dialogInformation("Please select an item form the list", null);
@@ -241,11 +262,35 @@ public class Hospital_GUI extends VBox{
 			alertBox.dialogInformation("Please select an item form the list", null);
 		}
 		else {
-			Controller.getInstance().removeConsultant(selectedIndex);
+			Controller.getInstance().removeConsultant(this.selectedIndex);
 			this.setupListViewData();
 		}
 		
 	}
 
-	
+	private void addPatientVisit() {
+		System.out.println("GIU line 250");
+//		addPButton.setUpWindow();  //possible solution for window appearing only on second click
+		EventHandler<ActionEvent> eventHandler = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				System.out.println("GIU line 255");
+				Patient selectedPatient = Controller.getInstance().searchPatient(selectedIndex);
+				Dialog<Visit> visitDialog = new AddVisitDialog(selectedPatient, selectedPatient.addVisit(new Visit(LocalDate.of(2024, 03, 30), ""))); ///TODO date to be today's date
+//				Dialog<Visit> visitDialog = new AddVisitDialog(Controller.getInstance().searchPatient(new Patient(new Name("", ""), "")));
+				Optional<Visit> result = visitDialog.showAndWait();
+//				System.out.println("GIU line 163 " + result.isPresent());
+				
+				if(result.isPresent()) {
+					Visit visit = result.get();
+					System.out.println("GUI line 266 " + selectedPatient.getPatientVisits());
+
+//					patientListView.getItems().add(visit.getDateOfVisit() + " " + visit.getNotes());					
+//					setupListViewData();
+				}
+			}
+		};
+		addVisitButton.setOnAction(eventHandler);
+	}
+
 }

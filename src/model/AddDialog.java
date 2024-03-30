@@ -4,7 +4,6 @@ package model;
 
 import java.lang.ModuleLayer.Controller;
 import java.util.function.Function;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -14,9 +13,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.util.Callback;
 import javafx.util.Pair;
 
+//TODO focus on name when open dialog
 public class AddDialog extends Dialog<Patient>{
 	
 	private Patient patient;
@@ -24,8 +25,6 @@ public class AddDialog extends Dialog<Patient>{
 
 	private TextField firstNameInput, lastNameInput, phoneInput, expertiseInput;
 
-	
-	//Overloading
 	public AddDialog(Patient p) {
 		super();
 		this.setTitle("Add Patient");
@@ -92,7 +91,7 @@ public class AddDialog extends Dialog<Patient>{
 //		firstNameInput.textProperty().bindBidirectional(Controller.getInstance().getName().getFirstName());
 		firstNameInput.textProperty().bindBidirectional(consultant.getName().getFirstNameProperty());
 		lastNameInput.textProperty().bindBidirectional(consultant.getName().getLastNameProperty());
-		phoneInput.textProperty().bindBidirectional(consultant.getPhoneProperty());
+		expertiseInput.textProperty().bindBidirectional(consultant.getPhoneProperty());
 
 	}
 	
@@ -130,7 +129,6 @@ public class AddDialog extends Dialog<Patient>{
 //		}
 	}
 
-	
 	private GridPane inputFieldsGrid() {
 		
 //		if(o instanceof Patient) {
@@ -142,30 +140,28 @@ public class AddDialog extends Dialog<Patient>{
 			// adding labels
 			Label nameLabel = new Label("Enter Name");
 			Label phoneLabel = new Label("Enter Phone");
-	//		Label dobLabel = new Label("Enter Date of Birth ");
 			
 			//adding text fields
 			firstNameInput = new TextField();
 			firstNameInput.setPromptText("Name");
+			firstNameInput.requestFocus();
 			lastNameInput = new TextField();
 			lastNameInput.setPromptText("Surname");
 			phoneInput = new TextField();
 			phoneInput.setPromptText("000-000-000");
-	//		TextField dobInput = new TextField();
-	//		dobInput.setPromptText("DD/MM/YYYY");
 			
 			// creating hBox and addAll
 			HBox nameBox = new HBox(5);
 			HBox phoneBox = new HBox(5);
-	//		HBox dobBox = new HBox(5);
 			
 			nameBox.getChildren().addAll(nameLabel, firstNameInput, lastNameInput);
 			phoneBox.getChildren().addAll(phoneLabel, phoneInput);
-	//		dobBox.getChildren().addAll(dobLabel, dobInput);
 			
 			grid.add(nameBox, 0, 0, 1, 1);
+			GridPane.setHgrow(firstNameInput, Priority.ALWAYS);
+			GridPane.setHgrow(lastNameInput, Priority.ALWAYS);
 			grid.add(phoneBox, 0, 1, 1, 1);
-	//		grid.add(dobBox, 0, 2, 1, 1);
+			GridPane.setHgrow(phoneInput, Priority.ALWAYS);
 	
 			return grid;
 

@@ -16,18 +16,18 @@ public class VisitList implements Serializable{
 		this.visits = new ArrayList<Visit>();
 	}
 	
-	public boolean addVisits(Visit visit) {
+	public Visit addVisits(Visit visit) {
 		try {
 			this.visits.add(visit);
 		} catch (Exception e) {
-			return false;
+			return null;
 		}
-		return true;
+		return visit;
 	}
 
 	@Override
 	public String toString() {
-		return "Number of visits: " + visits.size() + ", being: " + visits;
+		return visits.size() + " " + visits;
 	}
 
 }

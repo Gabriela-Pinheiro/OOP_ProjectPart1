@@ -55,6 +55,7 @@ public class Controller {
 	private void setStage(Stage stage) {
 		object.stage = stage;
 		stage.setTitle("Hospital Consultancy System");
+		//TODO dont allow close, ask to save instead
 		stage.setOnCloseRequest(event -> {
 			//alertBox.dialogConfirmation();
 		});
@@ -88,6 +89,10 @@ public class Controller {
 	public void removePatient(int i) {
 		//how to compare if the Object o is a Patient or a Consultant?
 		object.patients.removePatient(this.patients.getPatients().get(i).getName().toString());
+	}
+
+	public Patient searchPatient(int i) {
+		return object.patients.searchPatient(this.patients.getPatients().get(i).getName().toString());
 	}
 
 	public void setStorage() {
