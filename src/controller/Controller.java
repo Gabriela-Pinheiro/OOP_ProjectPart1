@@ -18,17 +18,15 @@ import view.Hospital_GUI;
 public class Controller {
 	
 	private static volatile Controller object;
-	private Practice practice; //TODO my Controller needs to be a practice right?
+	private Practice practice;
 	private PatientList patients;
 	private VisitList visits;
 	private transient Stage stage;
 	private transient Scene scene;
 	private SerialStorage store;
 
-
-	//this will be able to reference both objects???
 	private Controller() {
-		practice = new Practice(); //TODO i think thats what makes more sense. both
+		practice = new Practice();
 		patients = new PatientList();
 		object = this;
 	}
@@ -73,17 +71,15 @@ public class Controller {
 		return object.practice.getConsultantData();
 	}
 	
-	public Consultant addConsultant(Consultant c) {
-		return object.practice.addConsultant(c);
-	}
-	
 	public Patient addPatient(Patient p) {
+		
+//		object.practice.searchConsltant(null)
+		
 		return object.patients.addPatient(p);
 	}
 	
-	public void removeConsultant(int i) {
-		//how to compare if the Object o is a Patient or a Consultant?
-		object.practice.removeConsultant(this.practice.getConsultants().get(i).getName().toString());
+	public Consultant addConsultant(Consultant c) {
+		return object.practice.addConsultant(c);
 	}
 	
 	public void removePatient(int i) {
@@ -91,17 +87,29 @@ public class Controller {
 		object.patients.removePatient(this.patients.getPatients().get(i).getName().toString());
 	}
 
+	public void removeConsultant(int i) {
+		object.practice.removeConsultant(this.practice.getConsultants().get(i).getName().toString());
+	}
+	
 	public Patient searchPatient(int i) {
 		return object.patients.searchPatient(this.patients.getPatients().get(i).getName().toString());
+	}
+	
+	public Consultant searchConsultant(int i) {
+		return object.practice.searchConsltant(this.practice.getConsultants().get(i).getName().toString());
 	}
 
 	public void setStorage() {
 		store = new SerialStorage();
 	}
 
-	public boolean saveToFile() { //TODO now saving patients only
-		return store.writeFile(object.practice);
+	public void saveToFile() { //TODO now saving patients only
+		SerialStorage.writeFile(object.practice);
 	}
 	
+	public void loadFromFile() {
+		Object obj = SerialStorage.readFile();
+		this.practice = (Practice)obj;
+	}
 	
 }

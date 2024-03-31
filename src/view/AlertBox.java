@@ -1,6 +1,6 @@
 //Gabriela Pinheiro - R00225375 - Project_Part1
 
-package model;
+package view;
 
 import java.util.Optional;
 
@@ -13,7 +13,7 @@ public class AlertBox {
 	
 	public void dialogInformation(String textHeader, String textContent) {
 		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("MTU Student Record System");
+		alert.setTitle("Hospital Consultancy System");
 		alert.setHeaderText(textHeader);
 		alert.setContentText(textContent);
 		alert.show();
@@ -21,7 +21,7 @@ public class AlertBox {
 	
 	public void dialogConfirmation() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("MTU Student Record System");
+		alert.setTitle("Hospital Consultancy System");
 		alert.setHeaderText("Save before close?");
 		alert.setContentText("Cancel to close without saving!");
 		

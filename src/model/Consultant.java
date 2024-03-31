@@ -3,31 +3,33 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Objects;
-
 import collections.PatientList;
-import collections.VisitList;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 public class Consultant extends Person{
 	
 	public static int ID = 1;
 	private PatientList patients;
-	private String expertise;
+	private StringProperty expertise;
 	
 	public Consultant(Name name, String phone, String expertise) {
 		super(name, phone);
 		this.patients = new PatientList();
-		this.expertise = expertise;
+		this.expertise = new SimpleStringProperty(expertise);
 		super.setId("CO00", ID);
 		ID++;
 	}
 
-	public String getExpertise() {
+	public StringProperty getExpertiseProperty() {
 		return expertise;
+	}
+	public String getExpertise() {
+		return expertise.get();
 	}
 
 	public void setExpertise(String expertise) {
-		this.expertise = expertise;
+		this.expertise = new SimpleStringProperty(expertise);
 	}	
 
 	public ArrayList<Patient> getPatients() {
@@ -60,6 +62,6 @@ public class Consultant extends Person{
 
 	@Override
 	public String toString() {
-		return "\n\nId: " + this.getId() + "\nExpertise: " + expertise;
+		return this.getId()+ " " + this.getName().getFirstName() + " " + this.getName().getLastName() + " " + expertise.get();
 	}
 }

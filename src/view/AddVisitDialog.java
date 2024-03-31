@@ -1,6 +1,6 @@
 //Gabriela Pinheiro - R00225375 - Project_Part1
 
-package model;
+package view;
 
 import java.lang.ModuleLayer.Controller;
 import java.util.function.Function;
@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
@@ -17,6 +18,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import javafx.util.Pair;
+import model.Consultant;
+import model.Patient;
+import model.Visit;
 
 //TODO focus on date when open dialog
 public class AddVisitDialog extends Dialog<Visit>{
@@ -26,6 +30,7 @@ public class AddVisitDialog extends Dialog<Visit>{
 	private Visit visit;
 	private TextField notesInput;
 	private DatePicker dateInput;
+	private ComboBox comboBox;
 
 	public AddVisitDialog(Patient p, Visit v) {
 		super();
@@ -53,15 +58,14 @@ public class AddVisitDialog extends Dialog<Visit>{
 						event.consume();
 					}
 					
-				System.out.println("Visit Dialog line 51");
+//				System.out.println("Visit Dialog line 51");
 				}
 				
 				private boolean validateDialog() {
 					if((notesInput.getText().isEmpty()) || (dateInput.getValue() == null)) {
-						System.out.println("Visit Dialog empty line 65");
+//						System.out.println("Visit Dialog empty line 65");
 						return false;					
 					}
-					System.out.println("Visit Dialog line 68");
 					return true;
 				}
 			});	
@@ -96,7 +100,7 @@ public class AddVisitDialog extends Dialog<Visit>{
 			GridPane grid = new GridPane();
 			grid.setVgap(8);
 			grid.setHgap(10);
-			
+						
 			// adding labels
 			Label dateLabel = new Label("Enter Visit Date");
 			Label notesLabel = new Label("Enter Notes");

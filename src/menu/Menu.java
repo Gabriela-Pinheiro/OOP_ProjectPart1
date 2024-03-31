@@ -24,7 +24,7 @@ public class Menu {
 	public Menu() {
 		input = new Scanner(System.in);
 
-		Object obj = SerialStorage.readData();
+		Object obj = SerialStorage.readFile();
 		this.practice = (Practice)obj;
 
 		for(Consultant c: practice.getConsultants()) {

@@ -19,7 +19,7 @@ public class SerialStorage {
 			out.writeObject(o);
 			out.close();
 			file.close();
-			System.out.println("Object had been serialized");
+			System.out.println("Object has been serialized");
 		} catch (IOException ex) {
 			System.out.println(ex);
 			result = false;
@@ -27,7 +27,7 @@ public class SerialStorage {
 		return result;
 	}
 	
-	public static Object readData() {
+	public static Object readFile() {
 		Object outObject = null;
 		try {
 			FileInputStream file = new FileInputStream(fileName);
@@ -36,12 +36,14 @@ public class SerialStorage {
 			outObject = in.readObject();
 			in.close();
 			file.close();
-			System.out.println("Object had been deserialized");
+			System.out.println("Object has been deserialized");
 			
 		} catch (IOException ex) {
 			System.out.println("IOException is caught");
+			System.out.println(ex);
 		} catch (ClassNotFoundException ex) {
 			System.out.println("ClassNotFoundException is caught");
+			System.out.println(ex);
 		}
 		return outObject;
 	}
