@@ -2,7 +2,11 @@
 
 package view;
 
+import java.io.Serializable;
+
 import controller.Controller;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,25 +22,22 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.util.Callback;
 import model.Consultant;
+import model.Name;
 import model.Patient;
 
 //TODO focus on name when open dialog
-public class AddPatientDialog extends Dialog<Patient>{
+public class AddPatientDialog extends Dialog<Patient> {
 	
-	private Patient patient;
-	private Consultant consultant;
 	private AlertBox alertBox = new AlertBox();
 
 	private TextField firstNameInput, lastNameInput, phoneInput;
 	private ComboBox<String> comboBox;
 	private int selectedIndex = -1;
-
-	public AddPatientDialog(Patient p) {
+	
+	public AddPatientDialog() {
 		super();
 		this.setTitle("Add Patient");
-		this.patient = p;
 		buildUI();
-		setPropertyBinding();
 		setResultConverter();
 	}
 	
@@ -47,7 +48,7 @@ public class AddPatientDialog extends Dialog<Patient>{
 
 		getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 		Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
-		button.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+		button.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
@@ -69,14 +70,12 @@ public class AddPatientDialog extends Dialog<Patient>{
 			}
 		});	
 	}
-
-	private void setPropertyBinding() {
-		comboBox.setOnAction(e -> selectedIndex  = comboBox.getSelectionModel().getSelectedIndex());
-		firstNameInput.textProperty().bindBidirectional(patient.getName().getFirstNameProperty());
-		lastNameInput.textProperty().bindBidirectional(patient.getName().getLastNameProperty());
-		phoneInput.textProperty().bindBidirectional(patient.getPhoneProperty());
-	}
 		
+	public int getSelectedConsultant() {
+		 selectedIndex  = comboBox.getSelectionModel().getSelectedIndex();
+		 return selectedIndex;
+	}
+
 	private void setResultConverter() {			
 			
 		Callback<ButtonType, Patient> patientResultConverter = new Callback<ButtonType, Patient>(){
@@ -84,8 +83,8 @@ public class AddPatientDialog extends Dialog<Patient>{
 			@Override
 			public Patient call(ButtonType param) {
 				if(param == ButtonType.OK) {
-//					System.out.println("Dialog line 88");
-					return patient;					
+					return Controller.getInstance().addPatientToConsultant(selectedIndex, new Patient(new Name(firstNameInput.getText(), lastNameInput.getText()), phoneInput.getText()));
+										
 				} else {
 					return null;					
 				}
@@ -105,6 +104,7 @@ public class AddPatientDialog extends Dialog<Patient>{
 		comboBox = new ComboBox(); 
 		comboBox.setPromptText("Select a Consultant:");;
 		comboBox.setItems(consultants);
+		comboBox.setOnAction(e -> getSelectedConsultant());
 		
 		// adding labels
 		Label nameLabel = new Label("Enter Name");

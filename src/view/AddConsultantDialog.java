@@ -2,6 +2,7 @@
 
 package view;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -13,22 +14,20 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import model.Consultant;
-import model.Patient;
+import model.Name;
+import model.SerialStorage;
+import model.Test;
 
 //TODO focus on name when open dialog
-public class AddConsultantDialog extends Dialog<Consultant>{
+public class AddConsultantDialog extends Dialog<Consultant> {
 	
-	private Patient patient;
-	private Consultant consultant;
-
 	private TextField firstNameInput, lastNameInput, phoneInput, expertiseInput;
 	
-	public AddConsultantDialog(Consultant c) {
+	public AddConsultantDialog() {
 		super();
 		this.setTitle("Add Consultant");
-		this.consultant = c;
 		buildUI();
-		setPropertyBinding();
+//		setPropertyBinding();
 		setResultConverter();
 	}
 	
@@ -39,15 +38,15 @@ public class AddConsultantDialog extends Dialog<Consultant>{
 
 		getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 		Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
-		button.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+		button.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() { //changed from addEventFilter
 
 			@Override
 			public void handle(ActionEvent event) {
 				if(!validateDialog()) {
 					event.consume();
 				}
-				
-			System.out.println("C Dialog line 50");
+//				
+//				System.out.println("C Dialog line 50");
 			}
 			
 			private boolean validateDialog() {
@@ -61,15 +60,6 @@ public class AddConsultantDialog extends Dialog<Consultant>{
 		});
 	}
 	
-	private void setPropertyBinding() {
-
-		firstNameInput.textProperty().bindBidirectional(consultant.getName().getFirstNameProperty());
-		lastNameInput.textProperty().bindBidirectional(consultant.getName().getLastNameProperty());
-		phoneInput.textProperty().bindBidirectional(consultant.getPhoneProperty());
-		expertiseInput.textProperty().bindBidirectional(consultant.getExpertiseProperty());
-
-	}
-	
 	private void setResultConverter() {
 
 		Callback<ButtonType, Consultant> resultConverter = new Callback<ButtonType, Consultant>(){
@@ -78,7 +68,8 @@ public class AddConsultantDialog extends Dialog<Consultant>{
 			public Consultant call(ButtonType param) {
 				if(param == ButtonType.OK) {
 //					System.out.println("C Dialog line 83");
-					return consultant;					
+					return new Consultant(new Name(firstNameInput.getText(), lastNameInput.getText()), phoneInput.getText(), expertiseInput.getText());					
+//					return consultant;					
 				} else {
 					return null;					
 				}

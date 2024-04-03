@@ -2,6 +2,7 @@
 
 package view;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 import controller.Controller;
@@ -9,7 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 
-public class AlertBox {
+public class AlertBox implements Serializable{
 	
 	public void dialogInformation(String textHeader, String textContent) {
 		Alert alert = new Alert(AlertType.INFORMATION);

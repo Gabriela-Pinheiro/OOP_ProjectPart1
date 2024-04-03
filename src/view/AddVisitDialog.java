@@ -2,9 +2,12 @@
 
 package view;
 
-import java.lang.ModuleLayer.Controller;
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.function.Function;
-
+import controller.Controller;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -22,8 +25,9 @@ import model.Consultant;
 import model.Patient;
 import model.Visit;
 
+
 //TODO focus on date when open dialog
-public class AddVisitDialog extends Dialog<Visit>{
+public class AddVisitDialog extends Dialog<Visit> {
 	
 	private Patient patient;
 	private Consultant consultant;
@@ -32,13 +36,11 @@ public class AddVisitDialog extends Dialog<Visit>{
 	private DatePicker dateInput;
 	private ComboBox comboBox;
 
-	public AddVisitDialog(Patient p, Visit v) {
+	public AddVisitDialog(Patient p) {
 		super();
-		this.setTitle("Add Patient");
+		this.setTitle("Add Patient's Visit");
 		this.patient = p;
-		this.visit = v;
 		buildUI();
-		setPropertyBinding();
 		setResultConverter();
 	}
 	
@@ -50,15 +52,13 @@ public class AddVisitDialog extends Dialog<Visit>{
 
 			getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 			Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
-			button.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+			button.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {  //changed from addEventFilter
 
 				@Override
 				public void handle(ActionEvent event) {
 					if(!validateDialog()) {
 						event.consume();
 					}
-					
-//				System.out.println("Visit Dialog line 51");
 				}
 				
 				private boolean validateDialog() {
@@ -71,11 +71,6 @@ public class AddVisitDialog extends Dialog<Visit>{
 			});	
 	}
 
-	private void setPropertyBinding() {
-		notesInput.textProperty().bindBidirectional(visit.getNotesProperty());
-		dateInput.valueProperty().bindBidirectional(visit.getDateOfVisitProperty());
-		
-	}
 
 	private void setResultConverter() {			
 			
@@ -85,8 +80,7 @@ public class AddVisitDialog extends Dialog<Visit>{
 			@Override
 			public Visit call(ButtonType param) {
 				if(param == ButtonType.OK) {
-//					System.out.println("Dialog line 93");
-					return visit;					
+					return Controller.getInstance().searchPatient(patient.toString()).addVisit(new Visit(dateInput.getValue(), notesInput.getText()));					
 				} else {
 					return null;					
 				}
@@ -102,6 +96,7 @@ public class AddVisitDialog extends Dialog<Visit>{
 			grid.setHgap(10);
 						
 			// adding labels
+			Label patientLabel = new Label(this.patient.toString());
 			Label dateLabel = new Label("Enter Visit Date");
 			Label notesLabel = new Label("Enter Notes");
 			
@@ -118,8 +113,9 @@ public class AddVisitDialog extends Dialog<Visit>{
 			dateBox.getChildren().addAll(dateLabel, dateInput);
 			notesBox.getChildren().addAll(notesLabel, notesInput);
 			
-			grid.add(dateBox, 0, 0, 1, 1);
-			grid.add(notesBox, 0, 1, 1, 1);
+			grid.add(patientLabel, 0, 0, 1, 1);
+			grid.add(dateBox, 0, 1, 1, 1);
+			grid.add(notesBox, 0, 2, 1, 1);
 	
 			return grid;	
 			

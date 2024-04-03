@@ -3,19 +3,18 @@ package model;
 
 import java.io.Serializable;
 import java.util.Objects;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Name implements Serializable{
-	private StringProperty firstName;
-	private StringProperty lastName;
+	private String firstName;
+	private String lastName;
 
 	
 	public Name(String firstName, String lastName) {
 		super();
-		this.firstName = new SimpleStringProperty(firstName);
-		this.lastName = new SimpleStringProperty(lastName);
+		this.firstName = firstName;
+		this.lastName = lastName;
 	}
 
 	@Override 
@@ -32,22 +31,22 @@ public class Name implements Serializable{
 
 	@Override
 	public String toString() {
-		return firstName.get() + " " + lastName.get();
-	}
-	
-	public StringProperty getFirstNameProperty() {
-		return firstName;
-	}
-	
-	public StringProperty getLastNameProperty() {
-		return lastName;
+		return firstName + " " + lastName;
 	}
 	
 	public String getFirstName() {
-		return firstName.get();
+		return firstName;
 	}
 	
 	public String getLastName() {
-		return lastName.get();
+		return lastName;
 	}
+	
+//	public String getFirstName() {
+//		return firstName.get();
+//	}
+//	
+//	public String getLastName() {
+//		return lastName.get();
+//	}
 }

@@ -14,40 +14,26 @@ import javafx.scene.control.DatePicker;
 
 public class Visit implements Serializable{
 
-	private ObjectProperty<LocalDate> dateOfVisit;
-	private StringProperty notes;
+	private LocalDate dateOfVisit;
+	private String notes;
 	
 	@SuppressWarnings("unchecked")
 	public Visit(LocalDate dateOfVisit, String notes) {
-		this.dateOfVisit = 	new SimpleObjectProperty(dateOfVisit);
-		this.notes = new SimpleStringProperty(notes);
-	}
-
-	public ObjectProperty<LocalDate> getDateOfVisitProperty() {
-		//check to return the value itself
-		return dateOfVisit;
+		this.dateOfVisit = 	dateOfVisit;
+		this.notes = notes;
 	}
 	
 	public LocalDate getDateOfVisit() {
-		//check to return the value itself
-		return dateOfVisit.getValue();
+		return dateOfVisit;
 	}
 
-	public StringProperty getNotesProperty() {
+	public String getNotes() {
 		return notes;
 	}
-	
-	public String getNotes() {
-		return notes.get();
-	}
-
-//	public void setNotes(String notes) {
-//		this.notes += "\n" + notes;
-//	}
 
 	@Override
 	public String toString() {
-		return "\nVisit on " + dateOfVisit.getValue() + ", notes: " + notes.get() + ".";
+		return "\nVisit on " + dateOfVisit + ", notes: " + this.getNotes() + ".";
 	}
 }
 

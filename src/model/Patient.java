@@ -2,6 +2,7 @@
 
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 import javax.print.attribute.standard.Severity;
@@ -10,19 +11,29 @@ import collections.PatientList;
 import collections.VisitList;
 import javafx.beans.property.StringProperty;
 
-public class Patient extends Person{
+public class Patient extends Person implements Serializable{
 	
 	public static int ID = 1;
 	private VisitList patientVisits;
 	private String ilness;
 	public Severity severity;
+	int index;
 
 	public Patient(Name name, String phone) {
 		super(name, phone);
 		patientVisits = new VisitList();
 		super.setId("PA00", ID);
+//		index = this.index;
 		ID++;
 	}
+
+//	public int getIndex() {
+//		return index;
+//	}
+//
+//	public void setIndex(int index) {
+//		this.index = index;
+//	}
 
 	public enum Severity {
 		MILD,

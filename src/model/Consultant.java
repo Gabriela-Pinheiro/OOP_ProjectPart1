@@ -11,25 +11,22 @@ public class Consultant extends Person{
 	
 	public static int ID = 1;
 	private PatientList patients;
-	private StringProperty expertise;
+	private String expertise;
 	
 	public Consultant(Name name, String phone, String expertise) {
 		super(name, phone);
 		this.patients = new PatientList();
-		this.expertise = new SimpleStringProperty(expertise);
+		this.expertise = expertise;
 		super.setId("CO00", ID);
 		ID++;
 	}
 
-	public StringProperty getExpertiseProperty() {
-		return expertise;
-	}
 	public String getExpertise() {
-		return expertise.get();
+		return expertise;
 	}
 
 	public void setExpertise(String expertise) {
-		this.expertise = new SimpleStringProperty(expertise);
+		this.expertise = expertise;
 	}	
 
 	public ArrayList<Patient> getPatients() {
@@ -38,6 +35,15 @@ public class Consultant extends Person{
 
 	public void addPatient(Patient patient) {
 		this.patients.addPatient(patient);
+	}
+
+	public void removePatient(Patient patient) {
+		if(this.patients.getPatients().size() > 0) {
+			this.patients.removePatient(patient.getName().toString());
+			System.out.println("consultant 46 depois " + this.showPatients());			
+		} else {
+
+		}
 	}
 	
 	public void addPatientVisit(Patient p, Visit v) {
@@ -62,6 +68,6 @@ public class Consultant extends Person{
 
 	@Override
 	public String toString() {
-		return this.getId()+ " " + this.getName().getFirstName() + " " + this.getName().getLastName() + " " + expertise.get();
+		return this.getId()+ " " + this.getName().getFirstName() + " " + this.getName().getLastName() + " " + getExpertise();
 	}
 }
