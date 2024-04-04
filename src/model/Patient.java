@@ -23,17 +23,8 @@ public class Patient extends Person implements Serializable{
 		super(name, phone);
 		patientVisits = new VisitList();
 		super.setId("PA00", ID);
-//		index = this.index;
 		ID++;
 	}
-
-//	public int getIndex() {
-//		return index;
-//	}
-//
-//	public void setIndex(int index) {
-//		this.index = index;
-//	}
 
 	public enum Severity {
 		MILD,
@@ -78,7 +69,6 @@ public class Patient extends Person implements Serializable{
 	@Override
 	public String toString() {
 		return this.getId() + " " + this.getName().getFirstName() + " " + this.getName().getLastName();
-		//+ " " + this.getPatientVisits().toString()
 	}
 
 	@Override

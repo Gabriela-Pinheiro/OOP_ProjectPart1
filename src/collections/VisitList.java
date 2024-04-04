@@ -27,7 +27,7 @@ public class VisitList implements Serializable{
 
 	@Override
 	public String toString() {
-		return visits.size() + " " + visits;
+		return "Total of visits: " + visits.size() + ":\n" + visits;
 	}
 
 }

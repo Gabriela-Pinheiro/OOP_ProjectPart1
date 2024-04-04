@@ -4,6 +4,7 @@ package model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
@@ -33,7 +34,9 @@ public class Visit implements Serializable{
 
 	@Override
 	public String toString() {
-		return "\nVisit on " + dateOfVisit + ", notes: " + this.getNotes() + ".";
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+		String formattedString = dateOfVisit.format(formatter);
+		return "Visit on " + formattedString + " - Notes: " + this.getNotes() + "\n";
 	}
 }
 

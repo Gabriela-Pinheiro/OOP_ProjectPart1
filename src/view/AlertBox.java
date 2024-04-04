@@ -2,19 +2,17 @@
 
 package view;
 
-import java.io.Serializable;
 import java.util.Optional;
-
 import controller.Controller;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 
-public class AlertBox implements Serializable{
+public class AlertBox {
 	
 	public void dialogInformation(String textHeader, String textContent) {
 		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Hospital Consultancy System");
+		alert.setTitle("Hospital Consultancy System Informs");
 		alert.setHeaderText(textHeader);
 		alert.setContentText(textContent);
 		alert.show();

@@ -5,7 +5,6 @@ package view;
 import java.util.Optional;
 import controller.Controller;
 import model.Consultant;
-import model.Name;
 import model.Patient;
 import model.Visit;
 import javafx.beans.property.ListProperty;
@@ -30,17 +29,17 @@ public class Hospital_GUI extends VBox {
 	
 	private TabPane tabPane;
 	private Tab patientTab, consultantTab;
-	private Button addPButton, addCButton, removePButton, removeCButton, editButton, addVisitButton, loadButton, saveButton, exitButton;
+	private Button addPButton, addCButton, removePButton, removeCButton, editButton, addVisitButton;
 	private HBox patientTabBox, consultantTabBox;
 	private ListView patientListView, consultantListView;
 	private int patientSelectedIndex = -1;
 	private String patientSelectedName;
+	private String consultantSelectedName;
 	private int consultantSelectedIndex = -1;
 	protected transient ListProperty<String> patientListProperty = new SimpleListProperty<>();
 	protected transient ListProperty<String> consultantListProperty = new SimpleListProperty<>();
 	private AlertBox alertBox = new AlertBox();
 	private MenuBar menuBar;
-	private int consultantIndex;
 	
 	public Hospital_GUI() {
 		super();
@@ -138,7 +137,7 @@ public class Hospital_GUI extends VBox {
 		return patientTabBox;
 	}
 
-	private ListView addListView(String s) {
+	private ListView addListView(String s) { //TODO addPatListView addConsulListView
 		
 		if(s == "patient") {
 			
@@ -153,9 +152,7 @@ public class Hospital_GUI extends VBox {
 		        public void handle(MouseEvent event) {
 		        	if(Controller.getInstance().getPatientData().size() > 0)
 		        		patientSelectedIndex = patientListView.getSelectionModel().getSelectedIndex();
-		        	patientSelectedName = (String) patientListView.getSelectionModel().getSelectedItem();
-//					System.out.println("GIU line 160 " + patientSelectedPatient);
-		        	System.out.println("161 " + (patientListView.getSelectionModel().getSelectedItem()).getClass());
+			        	patientSelectedName = (String) patientListView.getSelectionModel().getSelectedItem();
 		        }
 		    });
 		
@@ -175,6 +172,7 @@ public class Hospital_GUI extends VBox {
 		        public void handle(MouseEvent event) {
 		        	if(Controller.getInstance().getConsultantData().size() > 0)
 		        		consultantSelectedIndex = consultantListView.getSelectionModel().getSelectedIndex();
+		        		consultantSelectedName = (String) consultantListView.getSelectionModel().getSelectedItem();
 		        }
 		    });
 		
@@ -191,30 +189,22 @@ public class Hospital_GUI extends VBox {
 			Controller.getInstance().getPatientData();
 			this.patientListView.itemsProperty().bind(patientListProperty);		
 			this.patientListProperty.set(FXCollections.observableArrayList(Controller.getInstance().getPatientData()));
-//			System.out.println("GUI line 192 " + FXCollections.observableArrayList(Controller.getInstance().getPatientData()));
 		} else {
-//			System.out.println("GIU line 179");
 			this.patientListView.getItems().clear();
 		}
 	}
 	
 	private void setupConsultantListViewData() {
-//		System.out.println("GUI line 173 size " + Controller.getInstance().getPatientData().size());
 		if(Controller.getInstance().getConsultantData().size() > 0) {
 			this.consultantListView.itemsProperty().bind(consultantListProperty);
 			
 			this.consultantListProperty.set(FXCollections.observableArrayList(Controller.getInstance().getConsultantData()));
-//			System.out.println("GUI line 206 " + FXCollections.observableArrayList(Controller.getInstance().getConsultantData()));
 		} else {
-//			System.out.println("GIU line 179");
 			this.consultantListView.getItems().clear();
 		}
 	}
 
 	private void addPatient() {
-		System.out.println("GIU line 212");
-
-//		Dialog<Patient> personDialog = new AddPatientDialog(Controller.getInstance().addPatient(new Patient(new Name("", ""), "")));  //original code
 		Dialog<Patient> personDialog = new AddPatientDialog();
 		Optional<Patient> result = personDialog.showAndWait();
 		
@@ -228,21 +218,20 @@ public class Hospital_GUI extends VBox {
 		Optional<Consultant> result = personDialog.showAndWait();
 		
 		if(result.isPresent()) {
-			Consultant consultant = result.get();
-			Controller.getInstance().addConsultant(consultant);
+//			Consultant consultant = result.get();
+			Controller.getInstance().addConsultant(result.get());
 			setupConsultantListViewData();
 		}
 	}
 
 	private void removePatient() {
 		if(this.patientSelectedIndex < 0) {
-			alertBox.dialogInformation("Please select an item form the list", null);
+			alertBox.dialogInformation("Please, select a Patient to be removed", null);
 		}
 		else {
 			Controller.getInstance().removePatient(this.patientSelectedName);
 			this.setupPatientListViewData();
 		}
-		
 	}
 	
 	private void removeConsultant() {
@@ -250,8 +239,10 @@ public class Hospital_GUI extends VBox {
 			alertBox.dialogInformation("Please select an item form the list", null);
 		}
 		else {
+			alertBox.dialogInformation("Consultant " + consultantSelectedName + " is deleted", "As well as all its patients");
 			Controller.getInstance().removeConsultant(this.consultantSelectedIndex);
 			this.setupConsultantListViewData();
+			this.setupPatientListViewData();
 		}
 		
 	}
@@ -259,19 +250,20 @@ public class Hospital_GUI extends VBox {
 	private void addPatientVisit() {
 
 		//TODO if no patient is selected informationBox - select a patient
-		System.out.println("GIU line 266");
 		Patient selectedPatient = Controller.getInstance().searchPatient(patientSelectedName);
-//		Dialog<Visit> visitDialog = new AddVisitDialog(selectedPatient, selectedPatient.addVisit(new Visit(LocalDate.now(), "")));
-		Dialog<Visit> visitDialog = new AddVisitDialog(selectedPatient);
-		Optional<Visit> result = visitDialog.showAndWait();
-//			System.out.println("GIU line 163 " + result.isPresent());
-		
-		if(result.isPresent()) {
-			Visit visit = result.get();
-//			patientListView.getItems().add(visit.getDateOfVisit() + " " + visit.getNotes());					
-		}
-		//TODO not to add empty patient
-		
+		if(selectedPatient == null) {
+			alertBox.dialogInformation("Please, select a Patient to add a visit to", "You can only add a visit to an exisintg patient");
+
+		} else {
+			Dialog<Visit> visitDialog = new AddVisitDialog(selectedPatient);
+			Optional<Visit> result = visitDialog.showAndWait();
+			
+			if(result.isPresent()) {
+				Visit visit = result.get();
+				alertBox.dialogInformation("Visit sucessfully added to\n" + selectedPatient.getName(), "" + selectedPatient.getPatientVisits());
+
+			}
+		}	
 	}
 
 	private void loadFromFile() {

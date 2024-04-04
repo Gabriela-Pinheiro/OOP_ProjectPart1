@@ -2,11 +2,7 @@
 
 package view;
 
-import java.io.Serializable;
-
 import controller.Controller;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,7 +17,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.util.Callback;
-import model.Consultant;
 import model.Name;
 import model.Patient;
 
@@ -54,18 +49,14 @@ public class AddPatientDialog extends Dialog<Patient> {
 			public void handle(ActionEvent event) {
 				if(!validateDialog()) {
 					event.consume();
-				}
-				
-			System.out.println("Dialog line 60");
+				}	
 			}
 			
 			private boolean validateDialog() {
-				if((firstNameInput.getText().isEmpty()) || (phoneInput.getText().isEmpty())) {
-					System.out.println("Dialog line 65");
-					alertBox.dialogInformation("Invalid Input!", "Insert information required, please.");
+				if((firstNameInput.getText().isEmpty()) || (lastNameInput.getText().isEmpty()) || (phoneInput.getText().isEmpty())) {
+					alertBox.dialogInformation("Invalid Input!", "Insert required information, please.");
 					return false;					
 				}
-				System.out.println("Dialog line 68");
 				return true;
 			}
 		});	
@@ -81,11 +72,16 @@ public class AddPatientDialog extends Dialog<Patient> {
 		Callback<ButtonType, Patient> patientResultConverter = new Callback<ButtonType, Patient>(){
 
 			@Override
-			public Patient call(ButtonType param) {
+			public Patient call(ButtonType param) { //TODO oblige to select a Consultant
 				if(param == ButtonType.OK) {
-					return Controller.getInstance().addPatientToConsultant(selectedIndex, new Patient(new Name(firstNameInput.getText(), lastNameInput.getText()), phoneInput.getText()));
+//					if(selectedIndex < 0) {
+//						alertBox.dialogInformation("Please, select a Consultant", null);
+//						return null;
+//					} else {						
+						return Controller.getInstance().addPatientToConsultant(selectedIndex, new Patient(new Name(firstNameInput.getText(), lastNameInput.getText()), phoneInput.getText()));
+//					}
 										
-				} else {
+				} else {	
 					return null;					
 				}
 			}

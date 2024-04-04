@@ -2,7 +2,6 @@
 
 package view;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -15,8 +14,6 @@ import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import model.Consultant;
 import model.Name;
-import model.SerialStorage;
-import model.Test;
 
 //TODO focus on name when open dialog
 public class AddConsultantDialog extends Dialog<Consultant> {
@@ -27,7 +24,6 @@ public class AddConsultantDialog extends Dialog<Consultant> {
 		super();
 		this.setTitle("Add Consultant");
 		buildUI();
-//		setPropertyBinding();
 		setResultConverter();
 	}
 	
@@ -67,9 +63,7 @@ public class AddConsultantDialog extends Dialog<Consultant> {
 			@Override
 			public Consultant call(ButtonType param) {
 				if(param == ButtonType.OK) {
-//					System.out.println("C Dialog line 83");
 					return new Consultant(new Name(firstNameInput.getText(), lastNameInput.getText()), phoneInput.getText(), expertiseInput.getText());					
-//					return consultant;					
 				} else {
 					return null;					
 				}

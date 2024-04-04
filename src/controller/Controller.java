@@ -4,18 +4,14 @@ package controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
 import collections.PatientList;
-import collections.VisitList;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.Patient;
 import model.Practice;
 import model.SerialStorage;
-import model.Test;
 import model.Consultant;
 import view.Hospital_GUI;
-
 
 public class Controller implements Serializable{
 	
@@ -84,26 +80,20 @@ public class Controller implements Serializable{
 		for(Consultant c: this.practice.getConsultants()) {
 			if(c.getName().equals(this.practice.getConsultants().get(consultantIndex).getName())) {		
 				 c.addPatient(p);
-				 System.out.println("80 controller" + c.getPatients());
 				 patient = p;
 			}
 		}
 		return patient;
 	}
 
-	
 	public Consultant addConsultant(Consultant c) {
 		return object.practice.addConsultant(c);
 	}
 	
 	public void removePatient(String toCompare) {
-		//object.patients.removePatient(p.getName().toString());
 		for(Consultant c: this.practice.getConsultants()) {
-			System.out.println("controller 108");
 			for(Patient p: c.getPatients()) {
-				System.out.println("controller 110");
 				if(p.toString().equals(toCompare)) {
-					System.out.println("controller 112");
 					c.removePatient(p);
 					break;
 				}
@@ -118,21 +108,16 @@ public class Controller implements Serializable{
 	public Patient searchPatient(String selectedPatient) {
 		Patient object = null;
 		for(Consultant c: this.practice.getConsultants()) {
-			System.out.println("controller 130");
 			for(Patient p: c.getPatients()) {
-				System.out.println("controller 132");
 				if(p.toString().equals(selectedPatient)) {
-					System.out.println("controller 134");
 					object = p;
 				}
 			}
 		}
 		return object;
-		
 	}
 	
 	public Consultant searchConsultant(int i) {
-		
 		return object.practice.searchConsltant(this.practice.getConsultants().get(i).getName().toString());
 	}
 	
