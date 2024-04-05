@@ -25,9 +25,9 @@ public abstract class Person implements Serializable{
 		return phone;
 	}
 	
-//	public String getPhone() {
-//		return phone.get();
-//	}
+	public void setPhone(String n) {
+		this.phone = n;
+	}
 	
 	protected void setId(String prefix, int id) {
 		this.id = prefix + id;

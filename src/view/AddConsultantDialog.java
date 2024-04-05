@@ -94,12 +94,10 @@ public class AddConsultantDialog extends Dialog<Consultant> {
 		expertiseInput = new TextField();
 		expertiseInput.setPromptText("General");
 
-		
 		// creating hBox and addAll
 		HBox nameBox = new HBox(5);
 		HBox phoneBox = new HBox(5);
 		HBox expertiseBox = new HBox(5);
-
 		
 		nameBox.getChildren().addAll(nameLabel, firstNameInput, lastNameInput);
 		phoneBox.getChildren().addAll(phoneLabel, phoneInput);

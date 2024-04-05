@@ -41,12 +41,4 @@ public class Name implements Serializable{
 	public String getLastName() {
 		return lastName;
 	}
-	
-//	public String getFirstName() {
-//		return firstName.get();
-//	}
-//	
-//	public String getLastName() {
-//		return lastName.get();
-//	}
 }

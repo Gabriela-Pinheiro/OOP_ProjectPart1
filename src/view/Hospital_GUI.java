@@ -33,9 +33,10 @@ public class Hospital_GUI extends VBox {
 	private HBox patientTabBox, consultantTabBox;
 	private ListView patientListView, consultantListView;
 	private int patientSelectedIndex = -1;
-	private String patientSelectedName;
-	private String consultantSelectedName;
-	private int consultantSelectedIndex = -1;
+	private Patient selectedPatient;
+	private Consultant selectedPatientsConsultant, selectedConsultant;
+	private String selectedConsultantsName;
+	private int selectedConsultantsIndex = -1;
 	protected transient ListProperty<String> patientListProperty = new SimpleListProperty<>();
 	protected transient ListProperty<String> consultantListProperty = new SimpleListProperty<>();
 	private AlertBox alertBox = new AlertBox();
@@ -44,11 +45,11 @@ public class Hospital_GUI extends VBox {
 	public Hospital_GUI() {
 		super();
 		setUpUI();
+		loadFromFile();
 	}
 
 	private void setUpUI() {
 		this.getChildren().addAll(this.setUpTabPane(), this.menuBar());
-		loadFromFile();
 	}
 	
 	private MenuBar menuBar() {
@@ -92,12 +93,11 @@ public class Hospital_GUI extends VBox {
 		consultantTabBox = new HBox();
 		consultantTabBox.setPadding(new Insets(20));
 		
-		//buttons
 		addCButton = new Button("Add Consultant");
 		addCButton.setOnAction(e -> addConsultant());
 		
 		editButton = new Button("Edit Consultant");
-		editButton.setOnAction(e -> System.out.println("Edit in consultant"));
+		editButton.setOnAction(e -> editConsultant());
 		
 		removeCButton = new Button("Remove Consultant");
 		removeCButton .setOnAction(e -> removeConsultant());
@@ -106,7 +106,7 @@ public class Hospital_GUI extends VBox {
 		consultantButtonsBox.setPadding(new Insets(20));
 
 		consultantButtonsBox.getChildren().addAll(addCButton, editButton, removeCButton);
-		consultantTabBox.getChildren().addAll(this.addListView("consultant"), consultantButtonsBox);
+		consultantTabBox.getChildren().addAll(this.addConsultantsListView(), consultantButtonsBox);
 		
 		return consultantTabBox;
 	}
@@ -115,12 +115,11 @@ public class Hospital_GUI extends VBox {
 		patientTabBox = new HBox();
 		patientTabBox.setPadding(new Insets(20));
 		
-		//buttons
 		addPButton = new Button("Add Patient");
 		addPButton.setOnAction(e -> addPatient());
 		
 		editButton = new Button("Edit Patient");
-		editButton.setOnAction(e -> System.out.println("Edit a patient"));
+		editButton.setOnAction(e -> editPatient());
 		
 		removePButton = new Button("Remove Patient");
 		removePButton.setOnAction(e -> removePatient());
@@ -132,56 +131,52 @@ public class Hospital_GUI extends VBox {
 		patientButtonsBox.setPadding(new Insets(20));
 
 		patientButtonsBox.getChildren().addAll(addPButton, editButton, removePButton, addVisitButton);
-		patientTabBox.getChildren().addAll(this.addListView("patient"), patientButtonsBox);
+		patientTabBox.getChildren().addAll(this.addPatientsListView(), patientButtonsBox);
 		
 		return patientTabBox;
 	}
 
-	private ListView addListView(String s) { //TODO addPatListView addConsulListView
+	private ListView addPatientsListView() { 
+		this.patientListView = new ListView();
+		this.patientListView.setPrefWidth(300);
+		this.patientListView.setPrefHeight(450);
+		patientListView.setPlaceholder(new Label("No Patients In List"));
 		
-		if(s == "patient") {
-			
-			this.patientListView = new ListView();
-			this.patientListView.setPrefWidth(300);
-			this.patientListView.setPrefHeight(450);
-			patientListView.setPlaceholder(new Label("No Patients In List"));
-			
-			this.patientListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+		this.patientListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+	        @Override
+	        public void handle(MouseEvent event) {
+	        	if(Controller.getInstance().getPatientData().size() > 0)
+	        		patientSelectedIndex = patientListView.getSelectionModel().getSelectedIndex();
+	        		selectedPatient = Controller.getInstance().searchPatient(patientListView.getSelectionModel().getSelectedItem().toString());
+	        		selectedPatientsConsultant = Controller.getInstance().searchPatientsConsultant(selectedPatient);
+		        	
+	        }
+	    });
 	
-		        @Override
-		        public void handle(MouseEvent event) {
-		        	if(Controller.getInstance().getPatientData().size() > 0)
-		        		patientSelectedIndex = patientListView.getSelectionModel().getSelectedIndex();
-			        	patientSelectedName = (String) patientListView.getSelectionModel().getSelectedItem();
-		        }
-		    });
-		
-			this.setupPatientListViewData();
-			return this.patientListView;
-			
-		} else if (s == "consultant") {
-			
-			this.consultantListView = new ListView();
-			this.consultantListView.setPrefWidth(300);
-			this.consultantListView.setPrefHeight(450);
-			consultantListView.setPlaceholder(new Label("No Consultants In List"));
-			
-			this.consultantListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+		this.setupPatientListViewData();
+		return this.patientListView;		
+	}
 	
-		        @Override
-		        public void handle(MouseEvent event) {
-		        	if(Controller.getInstance().getConsultantData().size() > 0)
-		        		consultantSelectedIndex = consultantListView.getSelectionModel().getSelectedIndex();
-		        		consultantSelectedName = (String) consultantListView.getSelectionModel().getSelectedItem();
-		        }
-		    });
+	private ListView addConsultantsListView() { 		
+		this.consultantListView = new ListView();
+		this.consultantListView.setPrefWidth(300);
+		this.consultantListView.setPrefHeight(450);
+		consultantListView.setPlaceholder(new Label("No Consultants In List"));
 		
-			this.setupConsultantListViewData();
-			return this.consultantListView;
-		} else {
-			return this.consultantListView;
-		}
-		
+		this.consultantListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+	        @Override
+	        public void handle(MouseEvent event) {
+	        	if(Controller.getInstance().getConsultantData().size() > 0)
+	        		selectedConsultantsIndex = consultantListView.getSelectionModel().getSelectedIndex();
+	        		selectedConsultantsName = (String) consultantListView.getSelectionModel().getSelectedItem();
+	        		selectedConsultant = Controller.getInstance().searchConsultant(selectedConsultantsIndex);
+	        }
+	    });
+	
+		this.setupConsultantListViewData();
+		return this.consultantListView;
 	}
 	
 	private void setupPatientListViewData() {
@@ -218,7 +213,6 @@ public class Hospital_GUI extends VBox {
 		Optional<Consultant> result = personDialog.showAndWait();
 		
 		if(result.isPresent()) {
-//			Consultant consultant = result.get();
 			Controller.getInstance().addConsultant(result.get());
 			setupConsultantListViewData();
 		}
@@ -229,18 +223,18 @@ public class Hospital_GUI extends VBox {
 			alertBox.dialogInformation("Please, select a Patient to be removed", null);
 		}
 		else {
-			Controller.getInstance().removePatient(this.patientSelectedName);
+			Controller.getInstance().removePatient(selectedPatient);
 			this.setupPatientListViewData();
 		}
 	}
 	
 	private void removeConsultant() {
-		if(this.consultantSelectedIndex < 0) {
+		if(this.selectedConsultantsIndex < 0) {
 			alertBox.dialogInformation("Please select an item form the list", null);
 		}
 		else {
-			alertBox.dialogInformation("Consultant " + consultantSelectedName + " is deleted", "As well as all its patients");
-			Controller.getInstance().removeConsultant(this.consultantSelectedIndex);
+			alertBox.dialogInformation("Consultant " + selectedConsultantsName + " is deleted", "As well as all its patients");
+			Controller.getInstance().removeConsultant(this.selectedConsultantsIndex);
 			this.setupConsultantListViewData();
 			this.setupPatientListViewData();
 		}
@@ -249,8 +243,6 @@ public class Hospital_GUI extends VBox {
 
 	private void addPatientVisit() {
 
-		//TODO if no patient is selected informationBox - select a patient
-		Patient selectedPatient = Controller.getInstance().searchPatient(patientSelectedName);
 		if(selectedPatient == null) {
 			alertBox.dialogInformation("Please, select a Patient to add a visit to", "You can only add a visit to an exisintg patient");
 
@@ -265,11 +257,46 @@ public class Hospital_GUI extends VBox {
 			}
 		}	
 	}
+	
+	private void editPatient() {
+		if(selectedPatient == null) {
+			alertBox.dialogInformation("Please, select a Patient to be edit", null);
 
-	private void loadFromFile() {
-		Controller.getInstance().loadFromFile();
-		this.setupConsultantListViewData();
+		} else {
+			Dialog<Patient> editDialog = new EditPatientDialog(selectedPatient, selectedPatientsConsultant);
+			Optional<Patient> result = editDialog.showAndWait();
+			
+			if(result.isPresent()) {
+				Patient patient = result.get();
+				alertBox.dialogInformation("Patient sucessfully changed", null);
+			}
+		}
 		this.setupPatientListViewData();
+
+	}
+	
+	private void editConsultant() { ///TODO finish method
+		if(selectedConsultant == null) {
+			alertBox.dialogInformation("Please, select a Consultant to be edit", null);
+		} else {
+			Dialog<Consultant> editDialog = new EditConsultantDialog(selectedConsultant);
+			Optional<Consultant> result = editDialog.showAndWait();
+			
+			if(result.isPresent()) {
+				Consultant consultant = result.get();
+				alertBox.dialogInformation("Consultant sucessfully changed", null);
+			}
+		}
+		this.setupConsultantListViewData();
+
+	}
+
+	private void loadFromFile() { //TODO validate if there is no data in practice, currently validation always returns true
+		if(Controller.getInstance() != null) {
+			Controller.getInstance().loadFromFile();
+			this.setupConsultantListViewData();
+			this.setupPatientListViewData();			
+		}
 	}
 	
 	private void saveToFile() {

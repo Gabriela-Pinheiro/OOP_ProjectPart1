@@ -12,6 +12,8 @@ import model.Practice;
 import model.SerialStorage;
 import model.Consultant;
 import view.Hospital_GUI;
+import view.AlertBox;
+
 
 public class Controller implements Serializable{
 	
@@ -19,6 +21,7 @@ public class Controller implements Serializable{
 	private Practice practice;
 	private transient Stage stage;
 	private transient Scene scene;
+	private AlertBox alertBox = new AlertBox();
 	
 	private Controller() {
 		practice = new Practice();
@@ -47,9 +50,8 @@ public class Controller implements Serializable{
 	private void setStage(Stage stage) {
 		object.stage = stage;
 		stage.setTitle("Hospital Consultancy System");
-		//TODO dont allow close, ask to save instead
 		stage.setOnCloseRequest(event -> {
-			//alertBox.dialogConfirmation();
+			alertBox.dialogConfirmation();
 		});
 	}
 
@@ -90,10 +92,10 @@ public class Controller implements Serializable{
 		return object.practice.addConsultant(c);
 	}
 	
-	public void removePatient(String toCompare) {
+	public void removePatient(Patient toCompare) {
 		for(Consultant c: this.practice.getConsultants()) {
 			for(Patient p: c.getPatients()) {
-				if(p.toString().equals(toCompare)) {
+				if(p == toCompare) {
 					c.removePatient(p);
 					break;
 				}
@@ -117,8 +119,44 @@ public class Controller implements Serializable{
 		return object;
 	}
 	
+	//TODO potentially change this method to something better
+	public Consultant searchPatientsConsultant(Patient selectedPatient) {
+		Consultant object = null;
+		for(Consultant c: this.practice.getConsultants()) {
+			for(Patient p: c.getPatients()) {
+				if(p == selectedPatient) {
+					object = c;
+				}
+			}
+		}
+		return object;
+	}
+	
 	public Consultant searchConsultant(int i) {
 		return object.practice.searchConsltant(this.practice.getConsultants().get(i).getName().toString());
+	}
+	
+	public Patient editPatient(Consultant c, Patient selectedPatient, String phone) {
+		Patient patient = null;
+		for(Patient p: c.getPatients()) {
+				if(p == selectedPatient) {
+					p.setPhone(phone);
+					
+				}
+			}
+		return patient;
+	}
+	
+	public Consultant editConsultant(Consultant selectedConsultant,  String phone, String expertise) {
+		Consultant consultant = null;
+		for(Consultant c: practice.getConsultants()) {
+				if(c == selectedConsultant) {
+					c.setPhone(phone);
+					c.setExpertise(expertise);
+					consultant = c;
+				}
+			}
+		return consultant;
 	}
 	
 	public void setStorage() {
