@@ -29,7 +29,7 @@ public class Hospital_GUI extends VBox {
 	
 	private TabPane tabPane;
 	private Tab patientTab, consultantTab;
-	private Button addPButton, addCButton, removePButton, removeCButton, editButton, addVisitButton;
+	private Button addPButton, addCButton, removePButton, removeCButton, editPButton, editCButton, addVisitButton;
 	private HBox patientTabBox, consultantTabBox;
 	private ListView patientListView, consultantListView;
 	private int patientSelectedIndex = -1;
@@ -96,8 +96,8 @@ public class Hospital_GUI extends VBox {
 		addCButton = new Button("Add Consultant");
 		addCButton.setOnAction(e -> addConsultant());
 		
-		editButton = new Button("Edit Consultant");
-		editButton.setOnAction(e -> editConsultant());
+		editCButton = new Button("Edit Consultant");
+		editCButton.setOnAction(e -> editConsultant());
 		
 		removeCButton = new Button("Remove Consultant");
 		removeCButton .setOnAction(e -> removeConsultant());
@@ -105,7 +105,7 @@ public class Hospital_GUI extends VBox {
 		VBox consultantButtonsBox = new VBox(10);
 		consultantButtonsBox.setPadding(new Insets(20));
 
-		consultantButtonsBox.getChildren().addAll(addCButton, editButton, removeCButton);
+		consultantButtonsBox.getChildren().addAll(addCButton, editCButton, removeCButton);
 		consultantTabBox.getChildren().addAll(this.addConsultantsListView(), consultantButtonsBox);
 		
 		return consultantTabBox;
@@ -118,8 +118,8 @@ public class Hospital_GUI extends VBox {
 		addPButton = new Button("Add Patient");
 		addPButton.setOnAction(e -> addPatient());
 		
-		editButton = new Button("Edit Patient");
-		editButton.setOnAction(e -> editPatient());
+		editPButton = new Button("Edit Patient");
+		editPButton.setOnAction(e -> editPatient());
 		
 		removePButton = new Button("Remove Patient");
 		removePButton.setOnAction(e -> removePatient());
@@ -130,7 +130,7 @@ public class Hospital_GUI extends VBox {
 		VBox patientButtonsBox = new VBox(10);
 		patientButtonsBox.setPadding(new Insets(20));
 
-		patientButtonsBox.getChildren().addAll(addPButton, editButton, removePButton, addVisitButton);
+		patientButtonsBox.getChildren().addAll(addPButton, editPButton, removePButton, addVisitButton);
 		patientTabBox.getChildren().addAll(this.addPatientsListView(), patientButtonsBox);
 		
 		return patientTabBox;
@@ -184,8 +184,14 @@ public class Hospital_GUI extends VBox {
 			Controller.getInstance().getPatientData();
 			this.patientListView.itemsProperty().bind(patientListProperty);		
 			this.patientListProperty.set(FXCollections.observableArrayList(Controller.getInstance().getPatientData()));
+			this.removePButton.setDisable(false);
+			this.editPButton.setDisable(false);
+			this.addVisitButton.setDisable(false);
 		} else {
 			this.patientListView.getItems().clear();
+			this.removePButton.setDisable(true);
+			this.editPButton.setDisable(true);
+			this.addVisitButton.setDisable(true);
 		}
 	}
 	
@@ -194,7 +200,13 @@ public class Hospital_GUI extends VBox {
 			this.consultantListView.itemsProperty().bind(consultantListProperty);
 			
 			this.consultantListProperty.set(FXCollections.observableArrayList(Controller.getInstance().getConsultantData()));
+			this.addPButton.setDisable(false);
+			this.removeCButton.setDisable(false);
+			this.editCButton.setDisable(false);
 		} else {
+			this.addPButton.setDisable(true);
+			this.removeCButton.setDisable(true);
+			this.editCButton.setDisable(true);
 			this.consultantListView.getItems().clear();
 		}
 	}

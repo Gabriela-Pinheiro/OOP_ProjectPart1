@@ -15,7 +15,6 @@ import javafx.util.Callback;
 import model.Consultant;
 import model.Name;
 
-//TODO focus on name when open dialog
 public class AddConsultantDialog extends Dialog<Consultant> {
 	
 	private TextField firstNameInput, lastNameInput, phoneInput, expertiseInput;

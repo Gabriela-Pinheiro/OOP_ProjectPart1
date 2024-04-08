@@ -77,7 +77,6 @@ public class EditConsultantDialog extends Dialog<Consultant> {
 			public Consultant call(ButtonType param) { 
 				if(param == ButtonType.OK) {
 					
-					//TODO make this actually change the values of patient editPatient fucntion
 					return Controller.getInstance().editConsultant(consultant, phoneInput.getText(), expertiseInput.getText());
 										
 				} else {	

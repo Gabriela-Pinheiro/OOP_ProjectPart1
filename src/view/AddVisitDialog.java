@@ -24,7 +24,7 @@ import view.AlertBox;
 public class AddVisitDialog extends Dialog<Visit> {
 	
 	private Patient patient;
-	private TextField notesInput;
+	private TextField notesInput, ilnessInput;
 	private DatePicker dateInput;
 	private AlertBox alertBox = new AlertBox();
 //	private ComboBox comboBox;
@@ -88,6 +88,7 @@ public class AddVisitDialog extends Dialog<Visit> {
 		// adding labels
 		Label patientLabel = new Label(this.patient.toString());
 		Label dateLabel = new Label("Enter Visit Date");
+		Label ilnessLabel = new Label("Enter Ilness");
 		Label notesLabel = new Label("Enter Notes");
 		
 		//adding text fields
@@ -96,17 +97,25 @@ public class AddVisitDialog extends Dialog<Visit> {
 		dateInput = new DatePicker();
 		dateInput.setPromptText("YYYY-MM-DD");
 		dateInput.setValue(LocalDate.now());
+		ilnessInput = new TextField();
+		ilnessInput.setPromptText("Eg: Diabetes");
 		
 		// creating hBox and addAll
 		HBox dateBox = new HBox(5);
 		HBox notesBox = new HBox(5);
+		HBox ilnessBox = new HBox(5);
+
 		
 		dateBox.getChildren().addAll(dateLabel, dateInput);
 		notesBox.getChildren().addAll(notesLabel, notesInput);
+		ilnessBox.getChildren().addAll(ilnessLabel, ilnessInput);
+
 		
 		grid.add(patientLabel, 0, 0, 1, 1);
 		grid.add(dateBox, 0, 1, 1, 1);
-		grid.add(notesBox, 0, 2, 1, 1);
+		grid.add(ilnessBox, 0, 2, 1, 1);
+		grid.add(notesBox, 0, 3, 1, 1);
+
 
 		return grid;	
 	}

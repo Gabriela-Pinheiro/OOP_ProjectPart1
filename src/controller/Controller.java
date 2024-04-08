@@ -22,6 +22,7 @@ public class Controller implements Serializable{
 	private transient Stage stage;
 	private transient Scene scene;
 	private AlertBox alertBox = new AlertBox();
+	private PatientList patients;
 	
 	private Controller() {
 		practice = new Practice();
@@ -61,7 +62,7 @@ public class Controller implements Serializable{
 	
 	public ArrayList<String> getPatientData() {
 		
-		PatientList patients = new PatientList();
+		patients = new PatientList();
 		int i = 1;
 		for(Consultant c: practice.getConsultants()) {
 			for(Patient p: c.getPatients()) {					
@@ -169,7 +170,14 @@ public class Controller implements Serializable{
 	
 	public void loadFromFile() {
 		Object obj = SerialStorage.readFile();
-		this.practice = (Practice)obj;
+		if(obj != null) {
+			this.practice = (Practice)obj;
+			int lastC = this.practice.getConsultantData().size()-1;
+			Consultant.ID = lastC+2;
+			int lastP = this.getPatientData().size()-1;
+			Patient.ID = lastP+2;
+		}
+		
 	}
 	
 }

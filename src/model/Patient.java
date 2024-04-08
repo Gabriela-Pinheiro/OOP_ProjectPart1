@@ -14,10 +14,9 @@ import javafx.beans.property.StringProperty;
 public class Patient extends Person implements Serializable{
 	//TODO adding new patient with PA001
 	public static int ID = 1;
-//	public int ID;
+	public int ID_2;
 	private VisitList patientVisits;
-	private String ilness;
-	public Severity severity;
+
 	int index;
 
 	public Patient(Name name, String phone) {
@@ -25,14 +24,6 @@ public class Patient extends Person implements Serializable{
 		patientVisits = new VisitList();
 		super.setId("PA00", ID);
 		ID++;
-	}
-
-	public enum Severity {
-		MILD,
-		MILDTOMODERATE,
-		MODERATE,
-		MODERATETOSEVERE,	
-		SEVERE;
 	}
 	
 	public VisitList getPatientVisits() {
@@ -51,21 +42,6 @@ public class Patient extends Person implements Serializable{
 		return this.patientVisits.addVisits(visit);			
 	}
 		
-	public Severity getSeverity() {
-		return severity;
-	}
-
-	public void setSeverity(Severity severity) {
-		this.severity = severity;
-	}
-
-	public String getIlness() {
-		return ilness;
-	}
-
-	public void setIlness(String ilness) {
-		this.ilness = ilness;
-	}
 
 	@Override
 	public String toString() {
@@ -81,7 +57,6 @@ public class Patient extends Person implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Patient other = (Patient) obj;
-		return Objects.equals(ilness, other.ilness) && Objects.equals(patientVisits, other.patientVisits)
-				&& Objects.equals(severity, other.severity);
+		return Objects.equals(patientVisits, other.patientVisits);
 	}
 }

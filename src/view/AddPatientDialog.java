@@ -25,7 +25,7 @@ public class AddPatientDialog extends Dialog<Patient> {
 	
 	private AlertBox alertBox = new AlertBox();
 
-	private TextField firstNameInput, lastNameInput, phoneInput;
+	private TextField firstNameInput, lastNameInput, phoneInput, ilnessInput;
 	private ComboBox<String> comboBox;
 	private int selectedIndex = -1;
 	
@@ -114,6 +114,7 @@ public class AddPatientDialog extends Dialog<Patient> {
 		lastNameInput.setPromptText("Surname");
 		phoneInput = new TextField();
 		phoneInput.setPromptText("000-000-000");
+
 		
 		// creating hBox and addAll
 		HBox nameBox = new HBox(5);
