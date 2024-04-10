@@ -39,6 +39,8 @@ public class AddPatientDialog extends Dialog<Patient> {
 		
 		GridPane gridPane = inputFieldsGrid();
 		getDialogPane().setContent(gridPane);
+		gridPane.getStylesheets().add(getClass().getResource("dialogs.css").toExternalForm());
+
 
 		getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 		Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
@@ -54,7 +56,15 @@ public class AddPatientDialog extends Dialog<Patient> {
 			
 			private boolean validateDialog() {
 				if((firstNameInput.getText().isEmpty()) || (lastNameInput.getText().isEmpty()) || (phoneInput.getText().isEmpty())) {
-					alertBox.dialogInformation("Invalid Input!", "Insert required information, please.");
+					if(selectedIndex < 0) {
+						alertBox.dialogInformation("Invalid Input!", "Insert required information, please.\nYou must select a Consultant, please.");
+						return false;					
+					} else {
+						alertBox.dialogInformation("Invalid Input!", "Insert required information, please.");						
+						return false;					
+					}
+				}else if (selectedIndex < 0)  {
+					alertBox.dialogInformation("Invalid Consultant!", "You must select a Consultant, please.");
 					return false;					
 				}
 				return true;
@@ -72,14 +82,9 @@ public class AddPatientDialog extends Dialog<Patient> {
 		Callback<ButtonType, Patient> patientResultConverter = new Callback<ButtonType, Patient>(){
 
 			@Override
-			public Patient call(ButtonType param) { //TODO oblige to select a Consultant
-				if(param == ButtonType.OK) {
-//					if(selectedIndex < 0) {
-//						alertBox.dialogInformation("Please, select a Consultant", null);
-//						return null;
-//					} else {						
-						return Controller.getInstance().addPatientToConsultant(selectedIndex, new Patient(new Name(firstNameInput.getText(), lastNameInput.getText()), phoneInput.getText()));
-//					}
+			public Patient call(ButtonType param) {
+				if(param == ButtonType.OK) {					
+					return Controller.getInstance().addPatientToConsultant(selectedIndex, new Patient(new Name(firstNameInput.getText(), lastNameInput.getText()), phoneInput.getText()));
 										
 				} else {	
 					return null;					
@@ -92,7 +97,7 @@ public class AddPatientDialog extends Dialog<Patient> {
 	private GridPane inputFieldsGrid() {
 					
 		GridPane grid = new GridPane();
-		grid.setVgap(10);
+		grid.setVgap(20);
 		grid.setHgap(10);
 		
 		ObservableList<String> consultants = FXCollections.observableArrayList(Controller.getInstance().getConsultantData());

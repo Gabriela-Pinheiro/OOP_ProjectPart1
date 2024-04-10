@@ -41,6 +41,7 @@ public class AddVisitDialog extends Dialog<Visit> {
 		
 		GridPane gridPane = inputFieldsGrid();
 		getDialogPane().setContent(gridPane);
+		gridPane.getStylesheets().add(getClass().getResource("dialogs.css").toExternalForm());
 
 		getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 		Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
@@ -88,6 +89,7 @@ public class AddVisitDialog extends Dialog<Visit> {
 					
 		// adding labels
 		Label patientLabel = new Label(this.patient.toString());
+		patientLabel.setId("name_label");
 		Label dateLabel = new Label("Enter Visit Date");
 		Label ilnessLabel = new Label("Enter Ilness");
 		Label notesLabel = new Label("Enter Notes");

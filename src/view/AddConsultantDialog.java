@@ -32,6 +32,7 @@ public class AddConsultantDialog extends Dialog<Consultant> {
 		
 		GridPane gridPane = inputFieldsGrid();
 		getDialogPane().setContent(gridPane);
+		gridPane.getStylesheets().add(getClass().getResource("dialogs.css").toExternalForm());
 
 		getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 		Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);

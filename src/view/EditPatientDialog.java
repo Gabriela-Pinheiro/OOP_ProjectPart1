@@ -20,7 +20,6 @@ import javafx.util.Callback;
 import model.Consultant;
 import model.Patient;
 
-//TODO focus on name when open dialog
 public class EditPatientDialog extends Dialog<Patient> {
 	
 	private Patient patient;
@@ -43,6 +42,7 @@ public class EditPatientDialog extends Dialog<Patient> {
 		
 		GridPane gridPane = inputFieldsGrid();
 		getDialogPane().setContent(gridPane);
+		gridPane.getStylesheets().add(getClass().getResource("dialogs.css").toExternalForm());
 
 		getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 		Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
@@ -79,7 +79,6 @@ public class EditPatientDialog extends Dialog<Patient> {
 			public Patient call(ButtonType param) { 
 				if(param == ButtonType.OK) {
 					
-					//TODO make this actually change the values of patient editPatient fucntion
 					return Controller.getInstance().editPatient(consultant, patient, phoneInput.getText());
 										
 				} else {	
@@ -100,17 +99,18 @@ public class EditPatientDialog extends Dialog<Patient> {
 
 		Label consultantName = new Label("Consultant:" + this.consultant.toString());
 		
-		// adding labels
 		Label nameLabel = new Label("Patient's Name:");
+		nameLabel.setId("name_label");
 		Label phoneLabel = new Label("Patient's Phone");
 		
 		Label fname = new Label(this.patient.getName().getFirstName());
+		fname.setId("f_name"); 
 		Label lname = new Label(this.patient.getName().getLastName());
+		lname.setId("l_name");
 		phoneInput = new TextField();
 		phoneInput.setPromptText("000-000-000");
 		phoneInput.setText(this.patient.getPhone());
 		
-		// creating hBox and addAll
 		HBox nameBox = new HBox(5);
 		HBox phoneBox = new HBox(5);
 		

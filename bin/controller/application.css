@@ -17,38 +17,16 @@
 }
 
 .label {
-    -fx-font-size: 12px;
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
-    -fx-text-fill: #9DC3A3;
+    -fx-text-fill: #5F5F5F;
     -fx-padding:10;
 }
 
-
-
-/*************maybe delete this*/
-.button:default { -fx-base: red; }
-
-.dialog > .dialog-pane {
-    -fx-background-color: greenyellow;
+.menu-bar {
+	-fx-background-color: #E5EFE7;
 }
 
-.dialog > .dialog-pane > .button-bar {
-    -fx-font-size: 24px;
-    -fx-background-color: indianred;
-    -fx-font-family: "Andalus";
-}
-
-.dialog > .dialog-pane > .content.label {
-    -fx-font-size: 16px;
-    -fx-font-weight: bold; 
-    -fx-fill: blue;
-}
-
-.dialog:header > .dialog-pane .header-panel {
-    -fx-background-color: cadetblue;
-    -fx-font-style: italic;
-}
-
-.alert.confirmation.dialog-pane {
-    -fx-graphic: url("lock24.png");
-}
+.tab-pane, .tab { 
+	-fx-background-color: -fx-outer-border, #E5EFE7; /*5F5F5F*/
+	-fx-font-size: 13px;}

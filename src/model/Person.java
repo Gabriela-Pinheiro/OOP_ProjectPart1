@@ -3,9 +3,6 @@
 package model;
 
 import java.io.Serializable;
-import java.util.Objects;
-import javafx.beans.property.StringProperty;
-import javafx.beans.property.SimpleStringProperty;
 
 public abstract class Person implements Serializable{
 	private Name name;

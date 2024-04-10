@@ -41,7 +41,6 @@ public class Consultant extends Person{
 	public void removePatient(Patient patient) {
 		if(this.patients.getPatients().size() > 0) {
 			this.patients.removePatient(patient.getName().toString());
-			System.out.println("consultant 46 depois " + this.showPatients());			
 		} else {
 
 		}

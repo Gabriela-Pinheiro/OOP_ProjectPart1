@@ -20,7 +20,6 @@ import javafx.util.Callback;
 import model.Consultant;
 import model.Patient;
 
-//TODO focus on name when open dialog
 public class EditConsultantDialog extends Dialog<Consultant> {
 	
 	private AlertBox alertBox = new AlertBox();
@@ -42,6 +41,7 @@ public class EditConsultantDialog extends Dialog<Consultant> {
 		
 		GridPane gridPane = inputFieldsGrid();
 		getDialogPane().setContent(gridPane);
+		gridPane.getStylesheets().add(getClass().getResource("dialogs.css").toExternalForm());
 
 		getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 		Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
@@ -96,13 +96,15 @@ public class EditConsultantDialog extends Dialog<Consultant> {
 		
 		ObservableList<String> consultants = FXCollections.observableArrayList(Controller.getInstance().getConsultantData());
 		
-		// adding labels
 		Label nameLabel = new Label("Consultant's Name:");
 		Label phoneLabel = new Label("Consultant's Phone");
 		Label expertiseLabel = new Label("Consultant's Expertise");
+		nameLabel.setId("name_label");
 		
 		Label fname = new Label(this.consultant.getName().getFirstName());
+		fname.setId("f_name");
 		Label lname = new Label(this.consultant.getName().getLastName());
+		lname.setId("l_name");
 		phoneInput = new TextField();
 		phoneInput.setPromptText("000-000-000");
 		phoneInput.setText(this.consultant.getPhone());
@@ -111,12 +113,10 @@ public class EditConsultantDialog extends Dialog<Consultant> {
 		expertiseInput.setPromptText("General");
 		expertiseInput.setText(this.consultant.getExpertise());
 		
-		// creating hBox and addAll
 		HBox nameBox = new HBox(5);
 		HBox phoneBox = new HBox(5);
 		HBox expertiseBox = new HBox(5);
 
-		
 		nameBox.getChildren().addAll(nameLabel, fname, lname);
 		phoneBox.getChildren().addAll(phoneLabel, phoneInput);
 		expertiseBox.getChildren().addAll(expertiseLabel, expertiseInput);

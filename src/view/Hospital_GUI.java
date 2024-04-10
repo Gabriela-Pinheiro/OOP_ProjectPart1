@@ -78,10 +78,10 @@ public class Hospital_GUI extends VBox {
 		patientTab = new Tab("Patient Management");
 		consultantTab = new Tab("Consultant Management");
 		
-		tabPane.getTabs().add(patientTab);
-		patientTab.setClosable(false);
 		tabPane.getTabs().add(consultantTab);
 		consultantTab.setClosable(false);
+		tabPane.getTabs().add(patientTab);
+		patientTab.setClosable(false);
 		
 		patientTab.setContent(this.patientTab());
 		consultantTab.setContent(this.consultantTab());
@@ -287,7 +287,7 @@ public class Hospital_GUI extends VBox {
 
 	}
 	
-	private void editConsultant() { ///TODO finish method
+	private void editConsultant() {
 		if(selectedConsultant == null) {
 			alertBox.dialogInformation("Please, select a Consultant to be edit", null);
 		} else {
@@ -303,12 +303,11 @@ public class Hospital_GUI extends VBox {
 
 	}
 
-	private void loadFromFile() { //TODO validate if there is no data in practice, currently validation always returns true
-		if(Controller.getInstance() != null) {
-			Controller.getInstance().loadFromFile();
-			this.setupConsultantListViewData();
-			this.setupPatientListViewData();			
-		}
+	private void loadFromFile() {
+		Controller.getInstance().loadFromFile();
+		this.setupConsultantListViewData();
+		this.setupPatientListViewData();			
+
 	}
 	
 	private void saveToFile() {

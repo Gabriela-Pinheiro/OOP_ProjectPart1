@@ -51,9 +51,9 @@ public class Controller implements Serializable{
 	private void setStage(Stage stage) {
 		object.stage = stage;
 		stage.setTitle("Hospital Consultancy System");
-//		stage.setOnCloseRequest(event -> {
-//			alertBox.dialogConfirmation();
-//		});
+		stage.setOnCloseRequest(event -> {
+			alertBox.dialogConfirmation();
+		});
 	}
 
 	public Stage getStage() {
