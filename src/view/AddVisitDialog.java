@@ -44,7 +44,8 @@ public class AddVisitDialog extends Dialog<Visit> {
 
 		getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 		Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
-		button.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {  //changed from addEventFilter
+		// if addEventHandler do not prevent object to being added. addEventFilter consumes the action of ok button
+		button.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>() {  //changed from addEventFilter
 
 			@Override
 			public void handle(ActionEvent event) {

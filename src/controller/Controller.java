@@ -51,9 +51,9 @@ public class Controller implements Serializable{
 	private void setStage(Stage stage) {
 		object.stage = stage;
 		stage.setTitle("Hospital Consultancy System");
-		stage.setOnCloseRequest(event -> {
-			alertBox.dialogConfirmation();
-		});
+//		stage.setOnCloseRequest(event -> {
+//			alertBox.dialogConfirmation();
+//		});
 	}
 
 	public Stage getStage() {
@@ -120,7 +120,6 @@ public class Controller implements Serializable{
 		return object;
 	}
 	
-	//TODO potentially change this method to something better
 	public Consultant searchPatientsConsultant(Patient selectedPatient) {
 		Consultant object = null;
 		for(Consultant c: this.practice.getConsultants()) {

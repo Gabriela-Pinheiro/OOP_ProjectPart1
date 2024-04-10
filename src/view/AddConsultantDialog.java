@@ -18,6 +18,8 @@ import model.Name;
 public class AddConsultantDialog extends Dialog<Consultant> {
 	
 	private TextField firstNameInput, lastNameInput, phoneInput, expertiseInput;
+	private AlertBox alertBox = new AlertBox();
+
 	
 	public AddConsultantDialog() {
 		super();
@@ -33,7 +35,8 @@ public class AddConsultantDialog extends Dialog<Consultant> {
 
 		getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 		Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
-		button.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() { //changed from addEventFilter
+		// if addEventHandler do not prevent object to being added. addEventFilter consumes the action of ok button
+		button.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
@@ -46,7 +49,8 @@ public class AddConsultantDialog extends Dialog<Consultant> {
 			
 			private boolean validateDialog() {
 				if((firstNameInput.getText().isEmpty()) || (lastNameInput.getText().isEmpty() || (phoneInput.getText().isEmpty()) || (expertiseInput.getText().isEmpty()))) {
-					System.out.println("C Dialog line 55");
+					alertBox.dialogInformation("Invalid Input!", "Insert required information, please.");
+
 					return false;					
 				}
 				System.out.println("C Dialog line 58");

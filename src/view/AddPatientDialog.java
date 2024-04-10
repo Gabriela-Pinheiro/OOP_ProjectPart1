@@ -24,8 +24,7 @@ import model.Patient;
 public class AddPatientDialog extends Dialog<Patient> {
 	
 	private AlertBox alertBox = new AlertBox();
-
-	private TextField firstNameInput, lastNameInput, phoneInput, ilnessInput;
+	private TextField firstNameInput, lastNameInput, phoneInput;
 	private ComboBox<String> comboBox;
 	private int selectedIndex = -1;
 	
@@ -43,7 +42,8 @@ public class AddPatientDialog extends Dialog<Patient> {
 
 		getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 		Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
-		button.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+		// if addEventHandler do not prevent object to being added. addEventFilter consumes the action of ok button
+		button.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
