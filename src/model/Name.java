@@ -3,8 +3,6 @@ package model;
 
 import java.io.Serializable;
 import java.util.Objects;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
 public class Name implements Serializable{
 	private String firstName;

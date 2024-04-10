@@ -4,8 +4,6 @@ package collections;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
-import model.Patient;
 import model.Visit;
 
 public class VisitList implements Serializable{

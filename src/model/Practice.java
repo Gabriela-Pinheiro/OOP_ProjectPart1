@@ -34,7 +34,6 @@ public class Practice implements Serializable{
 	
 	public Consultant searchConsltant(String name) {
 		Consultant obj = null;
-		//TODO cannot be case sensitive - all to upper or lower case
 		for(Consultant c: this.consultants) {
 			if(c.getName().toString().equals(name)) {
 				obj = c;

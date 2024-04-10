@@ -15,7 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.util.Callback;
 import model.Consultant;
 import model.Patient;
@@ -24,7 +23,7 @@ public class EditPatientDialog extends Dialog<Patient> {
 	
 	private Patient patient;
 	private AlertBox alertBox = new AlertBox();
-	private TextField firstNameInput, lastNameInput, phoneInput;
+	private TextField phoneInput;
 	private ComboBox<String> comboBox;
 	private int selectedIndex = -1;
 	private Consultant consultant;

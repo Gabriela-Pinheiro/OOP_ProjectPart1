@@ -27,7 +27,6 @@ public class AddVisitDialog extends Dialog<Visit> {
 	private TextField notesInput, ilnessInput;
 	private DatePicker dateInput;
 	private AlertBox alertBox = new AlertBox();
-//	private ComboBox comboBox;
 
 	public AddVisitDialog(Patient p) {
 		super();

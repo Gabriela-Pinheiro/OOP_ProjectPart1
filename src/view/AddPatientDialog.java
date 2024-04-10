@@ -20,7 +20,6 @@ import javafx.util.Callback;
 import model.Name;
 import model.Patient;
 
-//TODO focus on name when open dialog
 public class AddPatientDialog extends Dialog<Patient> {
 	
 	private AlertBox alertBox = new AlertBox();

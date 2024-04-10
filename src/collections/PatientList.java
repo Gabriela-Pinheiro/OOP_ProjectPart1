@@ -5,7 +5,6 @@ package collections;
 import java.io.Serializable;
 import java.util.ArrayList;
 import model.Patient;
-import model.Visit;
 
 public class PatientList implements Serializable{
 	
@@ -42,7 +41,6 @@ public class PatientList implements Serializable{
 	
 	public Patient searchPatient(String name) {
 		Patient obj = null;
-		//TODO cannot be case sensitive - all to upper or lower case
 		for(Patient p: this.patients) {
 			if(p.getName().toString().equals(name)) {
 				obj = p;
@@ -63,9 +61,7 @@ public class PatientList implements Serializable{
 	
 	public boolean editPatient(String name) {
 		Patient toEdit = this.searchPatient(name);
-		
 		if(toEdit != null) {
-			//TODO edit patient
 			return true;
 		}
 		return false;

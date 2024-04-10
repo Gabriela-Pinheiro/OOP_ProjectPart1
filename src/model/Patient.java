@@ -3,16 +3,11 @@
 package model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Objects;
-import javax.print.attribute.standard.Severity;
-
-import collections.PatientList;
 import collections.VisitList;
-import javafx.beans.property.StringProperty;
 
 public class Patient extends Person implements Serializable{
-	//TODO adding new patient with PA001
+
 	public static int ID = 1;
 	public int ID_2;
 	private VisitList patientVisits;

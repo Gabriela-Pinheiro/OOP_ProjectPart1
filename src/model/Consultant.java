@@ -4,11 +4,8 @@ package model;
 
 import java.util.ArrayList;
 import collections.PatientList;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
 public class Consultant extends Person{
-	//TODO adding new consultant with CO0001
 
 	public static int ID = 1;
 	private PatientList patients;

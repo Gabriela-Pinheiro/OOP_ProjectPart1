@@ -44,8 +44,6 @@ public class AddConsultantDialog extends Dialog<Consultant> {
 				if(!validateDialog()) {
 					event.consume();
 				}
-//				
-//				System.out.println("C Dialog line 50");
 			}
 			
 			private boolean validateDialog() {
@@ -54,7 +52,6 @@ public class AddConsultantDialog extends Dialog<Consultant> {
 
 					return false;					
 				}
-				System.out.println("C Dialog line 58");
 				return true;
 			}
 		});
