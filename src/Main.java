@@ -1,4 +1,4 @@
-//Gabriela Pinheiro - R00225375 - Project_Part1
+//Gabriela Pinheiro - R00225375 - Project_Part2
 
 import controller.Controller;
 import javafx.application.Application;

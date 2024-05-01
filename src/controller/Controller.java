@@ -1,15 +1,15 @@
-//Gabriela Pinheiro - R00225375 - Project_Part1
+//Gabriela Pinheiro - R00225375 - Project_Part2
 
 package controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import collections.PatientList;
+import data.SerialStorage;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.Patient;
 import model.Practice;
-import model.SerialStorage;
 import model.Consultant;
 import view.Hospital_GUI;
 import view.AlertBox;
@@ -23,10 +23,12 @@ public class Controller implements Serializable{
 	private transient Scene scene;
 	private AlertBox alertBox = new AlertBox();
 	private PatientList patients;
+	private SerialStorage serial;
 	
 	private Controller() {
 		practice = new Practice();
 		object = this;
+		this.serial = new SerialStorage();
 	}
 
 	public static Controller getInstance() {
@@ -164,11 +166,11 @@ public class Controller implements Serializable{
 	}
 
 	public void saveToFile() {
-		SerialStorage.writeFile(object.practice);
+		this.serial.createOrUpdate(object.practice);
 	}
 	
 	public void loadFromFile() {
-		Object obj = SerialStorage.readFile();
+		Object obj = this.serial.read();
 		if(obj != null) {
 			this.practice = (Practice)obj;
 			int lastC = this.practice.getConsultantData().size()-1;
