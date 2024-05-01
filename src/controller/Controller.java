@@ -5,6 +5,7 @@ package controller;
 import java.io.Serializable;
 import java.util.ArrayList;
 import collections.PatientList;
+import data.DataHelper;
 import data.SerialStorage;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -23,12 +24,12 @@ public class Controller implements Serializable{
 	private transient Scene scene;
 	private AlertBox alertBox = new AlertBox();
 	private PatientList patients;
-	private SerialStorage serial;
+	private DataHelper dataHelper;
 	
 	private Controller() {
 		practice = new Practice();
 		object = this;
-		this.serial = new SerialStorage();
+		this.dataHelper = new SerialStorage();
 	}
 
 	public static Controller getInstance() {
@@ -166,11 +167,11 @@ public class Controller implements Serializable{
 	}
 
 	public void saveToFile() {
-		this.serial.createOrUpdate(object.practice);
+		this.dataHelper.createOrUpdate(object.practice);
 	}
 	
 	public void loadFromFile() {
-		Object obj = this.serial.read();
+		Object obj = this.dataHelper.read();
 		if(obj != null) {
 			this.practice = (Practice)obj;
 			int lastC = this.practice.getConsultantData().size()-1;
