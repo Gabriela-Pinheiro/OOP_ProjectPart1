@@ -10,12 +10,17 @@ public class Consultant extends Person{
 	public static int ID = 1;
 	private PatientList patients;
 	private String expertise;
-	
-	public Consultant(Name name, String phone, String expertise) {
+	 
+	public Consultant(Name name, String phone, String expertise, String ID) {
 		super(name, phone);
+		super.setId(ID);
+		
 		this.patients = new PatientList();
 		this.expertise = expertise;
-		super.setId("CO00", ID);
+	}
+	
+	public Consultant(Name name, String phone, String expertise) {
+		this(name, phone, expertise, ("CO00" + ID));
 		ID++;
 	}
 

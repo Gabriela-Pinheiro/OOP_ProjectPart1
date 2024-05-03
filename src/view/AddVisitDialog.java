@@ -1,4 +1,4 @@
-//Gabriela Pinheiro - R00225375 - Project_Part1
+//Gabriela Pinheiro - R00225375 - Project_Part2
 
 package view;
 
@@ -20,7 +20,6 @@ import model.Patient;
 import model.Visit;
 import view.AlertBox;
 
-//TODO focus on date when open dialog
 public class AddVisitDialog extends Dialog<Visit> {
 	
 	private Patient patient;
@@ -71,7 +70,7 @@ public class AddVisitDialog extends Dialog<Visit> {
 			@Override
 			public Visit call(ButtonType param) {
 				if(param == ButtonType.OK) {
-					return Controller.getInstance().searchPatient(patient.toString()).addVisit(new Visit(dateInput.getValue(), notesInput.getText()));					
+					return Controller.getInstance().searchPatient(patient.toString()).addVisit(new Visit(dateInput.getValue(), notesInput.getText(), ilnessInput.getText(), patient.getId()));					
 				} else {
 					return null;					
 				}
@@ -107,17 +106,14 @@ public class AddVisitDialog extends Dialog<Visit> {
 		HBox notesBox = new HBox(5);
 		HBox ilnessBox = new HBox(5);
 
-		
 		dateBox.getChildren().addAll(dateLabel, dateInput);
 		notesBox.getChildren().addAll(notesLabel, notesInput);
 		ilnessBox.getChildren().addAll(ilnessLabel, ilnessInput);
 
-		
 		grid.add(patientLabel, 0, 0, 1, 1);
 		grid.add(dateBox, 0, 1, 1, 1);
 		grid.add(ilnessBox, 0, 2, 1, 1);
 		grid.add(notesBox, 0, 3, 1, 1);
-
 
 		return grid;	
 	}

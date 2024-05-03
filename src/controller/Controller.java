@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import collections.PatientList;
 import data.DataHelper;
+import data.MySQLStorage;
 import data.SerialStorage;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -29,7 +30,7 @@ public class Controller implements Serializable{
 	private Controller() {
 		practice = new Practice();
 		object = this;
-		this.dataHelper = new SerialStorage();
+		this.dataHelper = new MySQLStorage();
 	}
 
 	public static Controller getInstance() {

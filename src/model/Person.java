@@ -27,7 +27,15 @@ public abstract class Person implements Serializable{
 	}
 	
 	protected void setId(String prefix, int id) {
-		this.id = prefix + id;
+		if(this.getId() == null) {
+			this.id = prefix + id;
+		}
+	}
+	
+	protected void setId(String id) {
+		if(this.getId() == null) {
+			this.id = id;
+		}
 	}
 	
 	public String getId() {

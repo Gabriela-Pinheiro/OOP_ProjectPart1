@@ -9,15 +9,23 @@ import collections.VisitList;
 public class Patient extends Person implements Serializable{
 
 	public static int ID = 1;
-	public int ID_2;
 	private VisitList patientVisits;
+	private String consultantID;
 
 	int index;
 
-	public Patient(Name name, String phone) {
+	public Patient(Name name, String phone, String ID, String consultantID) {
 		super(name, phone);
+		
+		super.setId(ID);
+
+		this.consultantID = consultantID;
 		patientVisits = new VisitList();
-		super.setId("PA00", ID);
+		//TODO bring the consultant id from the selected consultant to the add patietn.
+	}
+	
+	public Patient(Name name, String phone, String consultantID) {
+		this(name, phone, ("PA00" + ID), consultantID);
 		ID++;
 	}
 	

@@ -1,4 +1,4 @@
-//Gabriela Pinheiro - R00225375 - Project_Part1
+//Gabriela Pinheiro - R00225375 - Project_Part2
 
 package view;
 
@@ -82,8 +82,9 @@ public class AddPatientDialog extends Dialog<Patient> {
 
 			@Override
 			public Patient call(ButtonType param) {
-				if(param == ButtonType.OK) {					
-					return Controller.getInstance().addPatientToConsultant(selectedIndex, new Patient(new Name(firstNameInput.getText(), lastNameInput.getText()), phoneInput.getText()));
+				if(param == ButtonType.OK) {
+					String cId = Controller.getInstance().searchConsultant(selectedIndex).getId();
+					return Controller.getInstance().addPatientToConsultant(selectedIndex, new Patient(new Name(firstNameInput.getText(), lastNameInput.getText()), phoneInput.getText(), cId));
 										
 				} else {	
 					return null;					

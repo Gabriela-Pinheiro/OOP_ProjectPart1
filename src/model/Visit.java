@@ -1,4 +1,4 @@
-//Gabriela Pinheiro - R00225375 - Project_Part1
+//Gabriela Pinheiro - R00225375 - Project_Part2
 
 package model;
 
@@ -16,21 +16,13 @@ public class Visit implements Serializable{
 
 	private LocalDate dateOfVisit;
 	private String ilness;
-	public Severity severity;
 	private String notes;
 	
 	@SuppressWarnings("unchecked")
-	public Visit(LocalDate dateOfVisit, String notes) {
+	public Visit(LocalDate dateOfVisit, String notes, String ilness, String patietnId) {
 		this.dateOfVisit = 	dateOfVisit;
 		this.notes = notes;
-	}
-	
-	public enum Severity {
-		MILD,
-		MILDTOMODERATE,
-		MODERATE,
-		MODERATETOSEVERE,	
-		SEVERE;
+		this.ilness = ilness;
 	}
 	
 	public LocalDate getDateOfVisit() {
@@ -48,20 +40,12 @@ public class Visit implements Serializable{
 	public void setIlness(String ilness) {
 		this.ilness = ilness;
 	}
-	
-	public Severity getSeverity() {
-		return severity;
-	}
-
-	public void setSeverity(Severity severity) {
-		this.severity = severity;
-	}
 
 	@Override
-	public String toString() { //TODO add ilness here
+	public String toString() {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
 		String formattedString = dateOfVisit.format(formatter);
-		return "Visit on " + formattedString + " - Notes: " + this.getNotes() + "\n";
+		return "Visit on " + formattedString + "to treat " + getIlness() + " - Notes: " + this.getNotes() + "\n";
 	}
 }
 
