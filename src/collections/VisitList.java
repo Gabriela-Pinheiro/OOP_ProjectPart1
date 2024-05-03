@@ -23,6 +23,14 @@ public class VisitList implements Serializable{
 		return visit;
 	}
 
+	public ArrayList<Visit> getVisits() {
+		return visits;
+	}
+
+	public void setVisits(ArrayList<Visit> visits) {
+		this.visits = visits;
+	}
+
 	@Override
 	public String toString() {
 		return "Total of visits: " + visits.size() + ":\n" + visits;

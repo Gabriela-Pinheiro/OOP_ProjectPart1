@@ -76,22 +76,24 @@ public class AddPatientDialog extends Dialog<Patient> {
 		 return selectedIndex;
 	}
 
-	private void setResultConverter() {			
-			
+	private void setResultConverter() {
 		Callback<ButtonType, Patient> patientResultConverter = new Callback<ButtonType, Patient>(){
-
 			@Override
 			public Patient call(ButtonType param) {
-				if(param == ButtonType.OK) {
-					String cId = Controller.getInstance().searchConsultant(selectedIndex).getId();
-					return Controller.getInstance().addPatientToConsultant(selectedIndex, new Patient(new Name(firstNameInput.getText(), lastNameInput.getText()), phoneInput.getText(), cId));
-										
-				} else {	
-					return null;					
+				Patient patientToReturn = null; 
+				try {
+					if(param == ButtonType.OK) {
+						String cId = Controller.getInstance().searchConsultant(selectedIndex).getId();
+						patientToReturn = Controller.getInstance().addPatientToConsultant(selectedIndex, new Patient(new Name(firstNameInput.getText(), lastNameInput.getText()), phoneInput.getText(), cId));
+						}
+				} catch (Error e) {
+					alertBox.dialogInformation("ERROR!!", e.getMessage());
 				}
-			}
-		};
-		setResultConverter(patientResultConverter);
+				return patientToReturn;				
+				}
+			};
+			
+			setResultConverter(patientResultConverter);
 	}
 
 	private GridPane inputFieldsGrid() {

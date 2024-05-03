@@ -9,5 +9,9 @@ public final class Validation {
 	public static boolean hasAnyNumber(String input) {
 	    return input.matches(".*\\d.*");
 	}
+	
+	public static boolean isPhone(String input) {
+		return input.matches("[0-9]+");
+	}
 
 }

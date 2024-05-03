@@ -62,6 +62,10 @@ public class Practice implements Serializable{
 		return consultantData;
 	}
 	
+	public void setConsultants(ArrayList<Consultant> consultants) {
+		this.consultants = consultants;
+	}
+
 	public String showConsultantsDetails() {
 		String toReturn = "";
 		for(Consultant consultant: this.getConsultants()) {

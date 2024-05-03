@@ -11,10 +11,15 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import collections.PatientList;
+import collections.VisitList;
 import model.Consultant;
 import model.Name;
 import model.Patient;
+import model.Practice;
 import model.Visit;
+import view.AlertBox;
 
 public class MySQLStorage implements DataHelper {
 	// JDBC driver name and database URL
@@ -30,7 +35,7 @@ public class MySQLStorage implements DataHelper {
 	ResultSet rs;
 
 	public MySQLStorage() {
-		this.readConsultants();
+		
 	}
 
 	public void makeConnection() {
@@ -54,6 +59,8 @@ public class MySQLStorage implements DataHelper {
 		// Result set get the result of the SQL query
 		rs = stmt.executeQuery(query);
 	}
+	
+	
 
 	// generic method which will return a list of rows where each row contains a
 	// list of strings
@@ -77,11 +84,12 @@ public class MySQLStorage implements DataHelper {
 	}
 
 	//execute a query where we will not get results from the database but just update it
-	public void executeUpdate(String query) throws SQLException {
-		// Statements allow to issue SQL queries to the database
+	private void executeUpdate(List<String> queries) throws SQLException {
 		stmt = conn.createStatement();
-		// Result set get the result of the SQL query
-		stmt.executeQuery(query);
+		for(String q: queries) {
+			stmt.addBatch(q);
+		}
+		stmt.executeBatch();
 	}
 
 	public void closeConnection() {
@@ -101,10 +109,11 @@ public class MySQLStorage implements DataHelper {
 		}
 	}
 	
-	public void readConsultants() {
-		// ReadWriteToFile read = new ReadWriteToFile();
-		// patients = (PatientList) read.readFromSerialFile("patients.ser");
+	public ArrayList<Consultant> readConsultants() {
+		
 		try {
+			ArrayList<Consultant> consultantList = new ArrayList<Consultant>();
+
 			this.makeConnection();
 			List<List<String>> results = this.executeQueryForResults("SELECT * FROM Consultants");
 			for (int i = 0; i < results.size(); i++) {
@@ -114,18 +123,22 @@ public class MySQLStorage implements DataHelper {
 				String phone = results.get(i).get(3);
 				String expertise = results.get(i).get(4);
 				Consultant c = new Consultant(new Name(fname, lname), phone, expertise, ID);
-				readPatient(ID);
-//				patients.addPatient(p);
+				c.setPatientList(readPatient(ID));
+				consultantList.add(c);
 			}
-			this.closeConnection();
+			return consultantList;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new Error("Error connecting to DB", e);
+		} finally {
 			this.closeConnection();
 		}
 	}
 	
-	public void readPatient(String consultantId) {
+	public PatientList readPatient(String consultantId) {
 		try {
+			PatientList patientList = new PatientList();
+
 			this.makeConnection();
 			List<List<String>> results = this.executeQueryForResults("SELECT * FROM Patients WHERE Patients.consultantId = " + "\"" + consultantId + "\"");
 			for (int i = 0; i < results.size(); i++) {
@@ -134,42 +147,110 @@ public class MySQLStorage implements DataHelper {
 				String lname = results.get(i).get(2);
 				String phone = results.get(i).get(3);
 				Patient p = new Patient(new Name(fname, lname), phone, ID, consultantId);
-				readVisits(ID);
-//				patients.addPatient(p);
+				p.setPatientVisits(readVisits(ID));
+				patientList.addPatient(p);
 			}
-			this.closeConnection();
+			return patientList;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new Error("Error connecting to DB", e);
+		} finally {
 			this.closeConnection();
 		}
 	}
 	
-	public void readVisits(String patientId) {
+	public VisitList readVisits(String patientId) {
 		try {
+			VisitList visitList = new VisitList ();
 			this.makeConnection();
 			List<List<String>> results = this.executeQueryForResults("SELECT * FROM Visits WHERE Visits.patientId = " + "\"" + patientId + "\"");
 			for (int i = 0; i < results.size(); i++) {
 				LocalDate dateOfVisit = LocalDate.parse(results.get(i).get(0));
 				String notes = results.get(i).get(1);
 				String ilness = results.get(i).get(2);
-				Visit v = new Visit(dateOfVisit, notes, ilness, patientId);
+				Visit v = new Visit(dateOfVisit, notes, ilness, patientId);				
+				visitList.addVisits(v);
 //				patients.addPatient(p);
 			}
-			this.closeConnection();
+			return visitList;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new Error("Error connecting to DB", e);
+		} finally {
 			this.closeConnection();
 		}
 	}
 
-
 	@Override
 	public void createOrUpdate(Object o) {
+		try {
+			this.makeConnection();
+			Practice practice = (Practice) o;
+			List<String> queries = new ArrayList<String>();
+			for(Consultant c: practice.getConsultants()){
+				queries.add("REPLACE INTO Consultants(ID, fname, lname, phone, expertise) VALUES ('" + c.getId() + "', '" + c.getName().getFirstName() + "', '" + c.getName().getLastName() + "', '" + c.getPhone() + "', '" + c.getExpertise() + "')");
+				
+				for(Patient p: c.getPatients()) {
+					queries.add(" REPLACE INTO Patients(ID, fname, lname, phone, consultantId) VALUES ('" + p.getId() + "', '" + p.getName().getFirstName() + "', '" + p.getName().getLastName() + "', '" + p.getPhone() + "', '" + c.getId() + "')");
+					
+					ArrayList<Visit> visits = p.getPatientVisits().getVisits();
+					
+					if (visits.size() > 0) {
+						queries.add("DELETE FROM Visits WHERE patientId = '" + p.getId() + "' ");
+						for(Visit v: visits) {
+							queries.add(" INSERT INTO Visits(dateOfVisit, notes, ilness, patientId) VALUES ('" + v.getDateOfVisitAsSQLString() + "', '" + v.getNotes() + "', '" + v.getIlness() + "', '" + p.getId() + "')");						
+						}
+					}
+				}				
+				
+				executeUpdate(queries);
+			}			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			this.closeConnection();
+		}
 		
 	}
-
+	
+	private int getLastConsultantId() {		
+		try {
+			this.makeConnection();
+			int cId = Integer.parseInt(
+					(this.executeQueryForResults("SELECT ID FROM Consultants ORDER by ID DESC LIMIT 1").get(0).get(0))
+					.replace("CO", "")
+					);
+			return ++cId;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new Error("Error connecting to DB", e);
+		} finally {
+			this.closeConnection();
+		}
+	}
+	
+	private int getLastPatientId() {
+		try {
+			this.makeConnection();
+			int pId = Integer.parseInt(
+					(this.executeQueryForResults("SELECT ID FROM Patients ORDER by ID DESC LIMIT 1").get(0).get(0))
+					.replace("PA", "")
+					);
+			return ++pId;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new Error("Error connecting to DB", e);
+		} finally {
+			this.closeConnection();
+		}
+	}
+	
 	@Override
 	public Object read() {
-		return null;
+		Practice practice = new Practice();
+		practice.setConsultants(readConsultants());
+		Consultant.ID = getLastConsultantId()+1;
+		Patient.ID = getLastPatientId()+1;
+		return practice;
 	}
 }

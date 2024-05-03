@@ -4,6 +4,7 @@ package model;
 
 import java.util.ArrayList;
 import collections.PatientList;
+import collections.VisitList;
 
 public class Consultant extends Person{
 
@@ -46,6 +47,10 @@ public class Consultant extends Person{
 		} else {
 
 		}
+	}
+	
+	public void setPatientList(PatientList patientList) {
+		this.patients = patientList;
 	}
 	
 	public void addPatientVisit(Patient p, Visit v) {

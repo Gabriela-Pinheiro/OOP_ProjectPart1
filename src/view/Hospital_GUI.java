@@ -212,12 +212,14 @@ public class Hospital_GUI extends VBox {
 	}
 
 	private void addPatient() {
+		
 		Dialog<Patient> personDialog = new AddPatientDialog();
 		Optional<Patient> result = personDialog.showAndWait();
 		
 		if(result.isPresent()) {
 			setupPatientListViewData();
-		}
+		}			
+		
 	}
 	
 	private void addConsultant() {
@@ -227,7 +229,7 @@ public class Hospital_GUI extends VBox {
 		if(result.isPresent()) {
 			Controller.getInstance().addConsultant(result.get());
 			setupConsultantListViewData();
-		}
+		}			
 	}
 
 	private void removePatient() {
@@ -257,7 +259,7 @@ public class Hospital_GUI extends VBox {
 
 		if(selectedPatient == null) {
 			alertBox.dialogInformation("Please, select a Patient to add a visit to", "You can only add a visit to an exisintg patient");
-
+			
 		} else {
 			Dialog<Visit> visitDialog = new AddVisitDialog(selectedPatient);
 			Optional<Visit> result = visitDialog.showAndWait();
@@ -265,9 +267,11 @@ public class Hospital_GUI extends VBox {
 			if(result.isPresent()) {
 				Visit visit = result.get();
 				alertBox.dialogInformation("Visit sucessfully added to\n" + selectedPatient.getName(), "" + selectedPatient.getPatientVisits());
-
+				
 			}
-		}	
+		}				
+		
+
 	}
 	
 	private void editPatient() {

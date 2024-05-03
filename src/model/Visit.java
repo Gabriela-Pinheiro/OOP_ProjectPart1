@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.DatePicker;
+import validation.Validation;
 
 public class Visit implements Serializable{
 
@@ -22,11 +23,16 @@ public class Visit implements Serializable{
 	public Visit(LocalDate dateOfVisit, String notes, String ilness, String patietnId) {
 		this.dateOfVisit = 	dateOfVisit;
 		this.notes = notes;
-		this.ilness = ilness;
+		this.setIlness(ilness);
 	}
 	
 	public LocalDate getDateOfVisit() {
 		return dateOfVisit;
+	}
+	
+	public String getDateOfVisitAsSQLString() {
+
+		return this.getDateOfVisit().toString();
 	}
 
 	public String getNotes() {
@@ -38,6 +44,9 @@ public class Visit implements Serializable{
 	}
 
 	public void setIlness(String ilness) {
+		if(Validation.hasAnyNumber(ilness)) {
+			throw new Error("Ilness cannot contain any number");
+		}
 		this.ilness = ilness;
 	}
 

@@ -16,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
+import model.Consultant;
 import model.Patient;
 import model.Visit;
 import view.AlertBox;
@@ -69,11 +70,17 @@ public class AddVisitDialog extends Dialog<Visit> {
 
 			@Override
 			public Visit call(ButtonType param) {
-				if(param == ButtonType.OK) {
-					return Controller.getInstance().searchPatient(patient.toString()).addVisit(new Visit(dateInput.getValue(), notesInput.getText(), ilnessInput.getText(), patient.getId()));					
-				} else {
-					return null;					
+				Visit visitToReturn = null; 
+				try {
+					if(param == ButtonType.OK) {
+						visitToReturn = Controller.getInstance().searchPatient(patient.toString()).addVisit(new Visit(dateInput.getValue(), notesInput.getText(), ilnessInput.getText(), patient.getId()));					
+					} else {
+						return null;					
+					}					
+				} catch (Error e) {
+					alertBox.dialogInformation("ERROR!!", e.getMessage());
 				}
+				return visitToReturn;
 			}
 		};
 		setResultConverter(visitResultConverter);

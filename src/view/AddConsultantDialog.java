@@ -14,6 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import model.Consultant;
 import model.Name;
+import model.Patient;
 
 public class AddConsultantDialog extends Dialog<Consultant> {
 	
@@ -63,11 +64,17 @@ public class AddConsultantDialog extends Dialog<Consultant> {
 
 			@Override
 			public Consultant call(ButtonType param) {
-				if(param == ButtonType.OK) {
-					return new Consultant(new Name(firstNameInput.getText(), lastNameInput.getText()), phoneInput.getText(), expertiseInput.getText());					
-				} else {
-					return null;					
+				Consultant consultantToReturn = null; 
+				try {
+					if(param == ButtonType.OK) {
+						consultantToReturn = new Consultant(new Name(firstNameInput.getText(), lastNameInput.getText()), phoneInput.getText(), expertiseInput.getText());					
+					} else {
+						return null;					
+					}					
+				} catch (Error e) {
+					alertBox.dialogInformation("ERROR!!", e.getMessage());
 				}
+				return consultantToReturn;
 			}
 		};
 		setResultConverter(resultConverter);
