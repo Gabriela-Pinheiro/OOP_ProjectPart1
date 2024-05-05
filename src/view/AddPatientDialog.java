@@ -83,7 +83,7 @@ public class AddPatientDialog extends Dialog<Patient> {
 				Patient patientToReturn = null; 
 				try {
 					if(param == ButtonType.OK) {
-						String cId = Controller.getInstance().searchConsultant(selectedIndex).getId();
+						int cId = Controller.getInstance().searchConsultant(selectedIndex).getId();
 						patientToReturn = Controller.getInstance().addPatientToConsultant(selectedIndex, new Patient(new Name(firstNameInput.getText(), lastNameInput.getText()), phoneInput.getText(), cId));
 						}
 				} catch (Error e) {

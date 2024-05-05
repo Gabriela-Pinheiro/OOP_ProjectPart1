@@ -9,6 +9,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import model.Consultant;
+import model.Patient;
+
 public class SerialStorage implements Serializable, DataHelper{
 	private static final String fileName = "serialPatientsData.ser";
 	
@@ -46,6 +49,38 @@ public class SerialStorage implements Serializable, DataHelper{
 		} catch (IOException ex) {
 			throw new Error(ex);
 		}
+	}
+
+
+
+	@Override
+	public void deleteConsultant(Consultant c) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void deletePatient(Patient p) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void insertConsultant(Consultant c) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void insertPatient(Patient p, Consultant c) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 

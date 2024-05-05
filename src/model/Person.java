@@ -4,14 +4,16 @@ package model;
 
 import java.io.Serializable;
 
+import validation.Validation;
+
 public abstract class Person implements Serializable{
 	private Name name;
-	protected String id;
+	private int ID;
 	private String phone;
 	
 	public Person(Name name, String phone) {
 		this.name = name;
-		this.phone = phone;
+		this.setPhone(phone);
 	}
 
 	public Name getName() {
@@ -23,23 +25,20 @@ public abstract class Person implements Serializable{
 	}
 	
 	public void setPhone(String n) {
+		if(!Validation.isPhone(n)) {
+			throw new Error("Phone cannot contain any letter");
+		}
 		this.phone = n;
 	}
 	
-	protected void setId(String prefix, int id) {
-		if(this.getId() == null) {
-			this.id = prefix + id;
+	public void setId(int id) {
+		if(this.getId() == 0) {
+			this.ID = id;
 		}
 	}
 	
-	protected void setId(String id) {
-		if(this.getId() == null) {
-			this.id = id;
-		}
-	}
-	
-	public String getId() {
-		return this.id;
+	public int getId() {
+		return this.ID;
 	}
 
 	@Override

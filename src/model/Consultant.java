@@ -8,11 +8,10 @@ import collections.VisitList;
 
 public class Consultant extends Person{
 
-	public static int ID = 1;
 	private PatientList patients;
 	private String expertise;
 	 
-	public Consultant(Name name, String phone, String expertise, String ID) {
+	public Consultant(Name name, String phone, String expertise, int ID) {
 		super(name, phone);
 		super.setId(ID);
 		
@@ -21,8 +20,7 @@ public class Consultant extends Person{
 	}
 	
 	public Consultant(Name name, String phone, String expertise) {
-		this(name, phone, expertise, ("CO00" + ID));
-		ID++;
+		this(name, phone, expertise, 0);
 	}
 
 	public String getExpertise() {

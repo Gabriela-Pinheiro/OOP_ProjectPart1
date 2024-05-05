@@ -4,6 +4,7 @@ package view;
 
 import java.util.Optional;
 import controller.Controller;
+import data.DataHelper;
 import model.Consultant;
 import model.Patient;
 import model.Visit;
@@ -60,9 +61,9 @@ public class Hospital_GUI extends VBox {
 		
 		menuBar.getMenus().addAll(file, help);
 		
-		MenuItem loadFromFileItem = new MenuItem("Load from file");
+		MenuItem loadFromFileItem = new MenuItem("Load");
 		loadFromFileItem.setOnAction(e -> loadFromFile());
-		MenuItem saveToFileItem = new MenuItem("Save to file");
+		MenuItem saveToFileItem = new MenuItem("Save");
 		saveToFileItem.setOnAction(e -> saveToFile());
 		MenuItem aboutItem = new MenuItem("About");
 		aboutItem.setOnAction(e -> about());
@@ -316,6 +317,8 @@ public class Hospital_GUI extends VBox {
 	
 	private void saveToFile() {
 		Controller.getInstance().saveToFile();
+		this.setupConsultantListViewData();
+		this.setupPatientListViewData();
 	}
 	
 	private void about() {

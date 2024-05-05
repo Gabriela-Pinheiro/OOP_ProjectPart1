@@ -8,25 +8,21 @@ import collections.VisitList;
 
 public class Patient extends Person implements Serializable{
 
-	public static int ID = 1;
 	private VisitList patientVisits;
-	private String consultantID;
+	private int consultantID;
 
 	int index;
 
-	public Patient(Name name, String phone, String ID, String consultantID) {
+	public Patient(Name name, String phone, int ID, int consultantID) {
 		super(name, phone);
-		
 		super.setId(ID);
 
 		this.consultantID = consultantID;
 		patientVisits = new VisitList();
-		//TODO bring the consultant id from the selected consultant to the add patietn.
 	}
 	
-	public Patient(Name name, String phone, String consultantID) {
-		this(name, phone, ("PA00" + ID), consultantID);
-		ID++;
+	public Patient(Name name, String phone, int consultantID) {
+		this(name, phone, 0, consultantID);
 	}
 	
 	public VisitList getPatientVisits() {

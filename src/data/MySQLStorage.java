@@ -91,7 +91,13 @@ public class MySQLStorage implements DataHelper {
 		}
 		stmt.executeBatch();
 	}
-
+	
+	private void executeUpdate(String query) throws SQLException {
+		stmt = conn.createStatement();
+		stmt.addBatch(query);
+		stmt.executeBatch();
+	}
+	
 	public void closeConnection() {
 		try {
 			if (stmt != null)
@@ -117,7 +123,7 @@ public class MySQLStorage implements DataHelper {
 			this.makeConnection();
 			List<List<String>> results = this.executeQueryForResults("SELECT * FROM Consultants");
 			for (int i = 0; i < results.size(); i++) {
-				String ID = results.get(i).get(0);
+				int ID = Integer.parseInt(results.get(i).get(0));
 				String fname = results.get(i).get(1);
 				String lname = results.get(i).get(2);
 				String phone = results.get(i).get(3);
@@ -135,14 +141,14 @@ public class MySQLStorage implements DataHelper {
 		}
 	}
 	
-	public PatientList readPatient(String consultantId) {
+	public PatientList readPatient(int consultantId) {
 		try {
 			PatientList patientList = new PatientList();
 
 			this.makeConnection();
 			List<List<String>> results = this.executeQueryForResults("SELECT * FROM Patients WHERE Patients.consultantId = " + "\"" + consultantId + "\"");
 			for (int i = 0; i < results.size(); i++) {
-				String ID = results.get(i).get(0);
+				int ID = Integer.parseInt(results.get(i).get(0));
 				String fname = results.get(i).get(1);
 				String lname = results.get(i).get(2);
 				String phone = results.get(i).get(3);
@@ -159,7 +165,7 @@ public class MySQLStorage implements DataHelper {
 		}
 	}
 	
-	public VisitList readVisits(String patientId) {
+	public VisitList readVisits(int patientId) {
 		try {
 			VisitList visitList = new VisitList ();
 			this.makeConnection();
@@ -180,7 +186,74 @@ public class MySQLStorage implements DataHelper {
 			this.closeConnection();
 		}
 	}
+	
+	public void deletePatient(Patient p) {
+		try {
+			List<String> queries = new ArrayList<String>();
+			queries.add("DELETE FROM Visits WHERE patientId = '" + p.getId() + "' ");
+			queries.add("DELETE FROM Patients WHERE ID = '" + p.getId() + "' ");
 
+			this.makeConnection();		
+			this.executeUpdate(queries);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}  finally {
+			this.closeConnection();
+		}
+	}
+	
+	public void deleteConsultant(Consultant c) {
+		try {
+			List<String> queries = new ArrayList<String>();
+			for(Patient p: c.getPatients()) {
+				this.deletePatient(p);				
+			}
+			
+			queries.add("DELETE FROM Consultants WHERE ID = '" + c.getId() + "' ");
+			
+			this.makeConnection();		
+			this.executeUpdate(queries);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}  finally {
+			this.closeConnection();
+		}
+	}
+
+	public void insertConsultant(Consultant c) {
+		if (c.getId() > 0) {
+			return;
+		}
+		try {
+			this.makeConnection();
+			executeUpdate("REPLACE INTO Consultants(fname, lname, phone, expertise) VALUES ('" + c.getName().getFirstName() + "', '" + c.getName().getLastName() + "', '" + c.getPhone() + "', '" + c.getExpertise() + "')");
+			int id = getLastConsultantId();
+			c.setId(id);			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			this.closeConnection();
+		}
+	}
+	
+	public void insertPatient(Patient p, Consultant c) {
+		if (p.getId() > 0 || c.getId() <= 0) {
+			return;
+		}
+		try {
+			this.makeConnection();
+			executeUpdate(" REPLACE INTO Patients(fname, lname, phone, consultantId) VALUES ('" + p.getName().getFirstName() + "', '" + p.getName().getLastName() + "', '" + p.getPhone() + "', '" + c.getId() + "')");						
+			int id = getLastPatientId();
+			p.setId(id);			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			this.closeConnection();
+		}
+	}
+	
 	@Override
 	public void createOrUpdate(Object o) {
 		try {
@@ -191,7 +264,7 @@ public class MySQLStorage implements DataHelper {
 				queries.add("REPLACE INTO Consultants(ID, fname, lname, phone, expertise) VALUES ('" + c.getId() + "', '" + c.getName().getFirstName() + "', '" + c.getName().getLastName() + "', '" + c.getPhone() + "', '" + c.getExpertise() + "')");
 				
 				for(Patient p: c.getPatients()) {
-					queries.add(" REPLACE INTO Patients(ID, fname, lname, phone, consultantId) VALUES ('" + p.getId() + "', '" + p.getName().getFirstName() + "', '" + p.getName().getLastName() + "', '" + p.getPhone() + "', '" + c.getId() + "')");
+					queries.add(" REPLACE INTO Patients(ID, fname, lname, phone, consultantId) VALUES ('" + p.getId() + "', '" + p.getName().getFirstName() + "', '" + p.getName().getLastName() + "', '" + p.getPhone() + "', '" + c.getId() + "')");						
 					
 					ArrayList<Visit> visits = p.getPatientVisits().getVisits();
 					
@@ -216,32 +289,22 @@ public class MySQLStorage implements DataHelper {
 	private int getLastConsultantId() {		
 		try {
 			this.makeConnection();
-			int cId = Integer.parseInt(
-					(this.executeQueryForResults("SELECT ID FROM Consultants ORDER by ID DESC LIMIT 1").get(0).get(0))
-					.replace("CO", "")
-					);
-			return ++cId;
+			return Integer.parseInt(
+					(this.executeQueryForResults("SELECT ID FROM Consultants ORDER by ID DESC LIMIT 1").get(0).get(0)));
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new Error("Error connecting to DB", e);
-		} finally {
-			this.closeConnection();
 		}
 	}
 	
 	private int getLastPatientId() {
 		try {
 			this.makeConnection();
-			int pId = Integer.parseInt(
-					(this.executeQueryForResults("SELECT ID FROM Patients ORDER by ID DESC LIMIT 1").get(0).get(0))
-					.replace("PA", "")
-					);
-			return ++pId;
+			return Integer.parseInt(
+					(this.executeQueryForResults("SELECT ID FROM Patients ORDER by ID DESC LIMIT 1").get(0).get(0)));
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new Error("Error connecting to DB", e);
-		} finally {
-			this.closeConnection();
 		}
 	}
 	
@@ -249,8 +312,8 @@ public class MySQLStorage implements DataHelper {
 	public Object read() {
 		Practice practice = new Practice();
 		practice.setConsultants(readConsultants());
-		Consultant.ID = getLastConsultantId()+1;
-		Patient.ID = getLastPatientId()+1;
+//		Consultant.ID = getLastConsultantId()+1;
+//		Patient.ID = getLastPatientId()+1;
 		return practice;
 	}
 }

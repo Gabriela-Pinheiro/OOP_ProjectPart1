@@ -86,14 +86,16 @@ public class Controller implements Serializable{
 		
 		for(Consultant c: this.practice.getConsultants()) {
 			if(c.getName().equals(this.practice.getConsultants().get(consultantIndex).getName())) {		
-				 c.addPatient(p);
-				 patient = p;
+				this.dataHelper.insertPatient(p, c);
+				c.addPatient(p);
+				patient = p;
 			}
 		}
 		return patient;
 	}
 
 	public Consultant addConsultant(Consultant c) {
+		this.dataHelper.insertConsultant(c);
 		return object.practice.addConsultant(c);
 	}
 	
@@ -101,6 +103,7 @@ public class Controller implements Serializable{
 		for(Consultant c: this.practice.getConsultants()) {
 			for(Patient p: c.getPatients()) {
 				if(p == toCompare) {
+					this.dataHelper.deletePatient(p);
 					c.removePatient(p);
 					break;
 				}
@@ -109,7 +112,10 @@ public class Controller implements Serializable{
 	}
 
 	public void removeConsultant(int i) {
-		object.practice.removeConsultant(this.practice.getConsultants().get(i).getName().toString());
+		Consultant c = this.practice.getConsultants().get(i);
+		this.dataHelper.deleteConsultant(c);
+		object.practice.removeConsultant(c.getName().toString());
+		
 	}
 	
 	public Patient searchPatient(String selectedPatient) {
@@ -175,10 +181,10 @@ public class Controller implements Serializable{
 		Object obj = this.dataHelper.read();
 		if(obj != null) {
 			this.practice = (Practice)obj;
-			int lastC = this.practice.getConsultantData().size()-1;
-			Consultant.ID = lastC+2;
-			int lastP = this.getPatientData().size()-1;
-			Patient.ID = lastP+2;
+//			int lastC = this.practice.getConsultantData().size()-1;
+//			Consultant.ID = lastC+2;
+//			int lastP = this.getPatientData().size()-1;
+//			Patient.ID = lastP+2;
 		}
 		
 	}

@@ -20,7 +20,7 @@ public class Visit implements Serializable{
 	private String notes;
 	
 	@SuppressWarnings("unchecked")
-	public Visit(LocalDate dateOfVisit, String notes, String ilness, String patietnId) {
+	public Visit(LocalDate dateOfVisit, String notes, String ilness, int patietnId) {
 		this.dateOfVisit = 	dateOfVisit;
 		this.notes = notes;
 		this.setIlness(ilness);

@@ -11,7 +11,7 @@ public final class Validation {
 	}
 	
 	public static boolean isPhone(String input) {
-		return input.matches("[0-9]+");
+		return input.matches("^[0-9]*$");
 	}
 
 }
